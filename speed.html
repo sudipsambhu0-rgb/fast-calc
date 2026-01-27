@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speed Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:320px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+
+    input, select, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      text-align:center;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Speed Calculator</h2>
+
+  <select v-model="mode">
+    <option value="speed">Find Speed</option>
+    <option value="distance">Find Distance</option>
+    <option value="time">Find Time</option>
+  </select>
+
+  <input
+    type="number"
+    v-model="distance"
+    placeholder="Distance (km)"
+    :disabled="mode === 'distance'"
+  >
+
+  <input
+    type="number"
+    v-model="time"
+    placeholder="Time (hours)"
+    :disabled="mode === 'time'"
+  >
+
+  <input
+    type="number"
+    v-model="speed"
+    placeholder="Speed (km/h)"
+    :disabled="mode === 'speed'"
+  >
+
+  <button @click="calculate">Calculate</button>
+
+  <div class="result" v-if="result !== null">
+    <strong>{{ resultText }}</strong>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      mode:"speed",
+      distance:"",
+      time:"",
+      speed:"",
+      result:null,
+      resultText:""
+    }
+  },
+  methods:{
+    calculate(){
+      let d = Number(this.distance);
+      let t = Number(this.time);
+      let s = Number(this.speed);
+
+      if(this.mode === "speed"){
+        if(!d || !t){
+          alert("Enter distance and time");
+          return;
+        }
+        let speed = d / t;
+        this.resultText = `Speed = ${speed.toFixed(2)} km/h`;
+      }
+
+      if(this.mode === "distance"){
+        if(!s || !t){
+          alert("Enter speed and time");
+          return;
+        }
+        let distance = s * t;
+        this.resultText = `Distance = ${distance.toFixed(2)} km`;
+      }
+
+      if(this.mode === "time"){
+        if(!d || !s){
+          alert("Enter distance and speed");
+          return;
+        }
+        let time = d / s;
+        this.resultText = `Time = ${time.toFixed(2)} hours`;
+      }
+
+      this.result = true;
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

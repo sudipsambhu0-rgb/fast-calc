@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMI Calculator</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+  min-height:100svh;
+  background:linear-gradient(135deg, #0F172A, #020617);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* App Card */
+.app{
+  position:relative;
+  height:360px;
+  width:310px;
+  background:#1E293B;
+  border-radius:24px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.5);
+  padding-top:40px;
+}
+
+/* Common input style */
+input{
+  position:absolute;
+  height:38px;
+  width:200px;
+  left:55px;
+  border:2px solid #38BDF8;
+  border-radius:12px;
+  background:#020617;
+  color:#E5E7EB;
+  font-size:16px;
+  padding-left:12px;
+  outline:none;
+  transition:0.3s;
+}
+
+input:focus{
+  border-color:#22D3EE;
+  box-shadow:0 0 10px rgba(34,211,238,0.4);
+}
+
+/* Inputs positioning */
+#EMI{ top:60px; }
+#rate{ top:115px; }
+#time{ top:170px; }
+
+/* Button */
+#btn{
+  position:absolute;
+  top:230px;
+  left:85px;
+  height:40px;
+  width:140px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg, #38BDF8, #22D3EE);
+  color:#020617;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+#btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 10px 20px rgba(56,189,248,0.4);
+}
+
+/* Result text */
+p{
+  position:absolute;
+  top:290px;
+  left:55px;
+  color:#38BDF8;
+  font-size:16px;
+}
+  </style>
+</head>
+<body>
+<div class="app">
+  <input type="number" id="EMI" v-model="Emi" placeholder="Enter loan amount">
+  <input type="number" id="rate" v-model="rate" placeholder="Enter rate (%)">
+  <input type="number" id="time" v-model="time" placeholder="Enter time (years)">
+  <button @click="Check" id="btn">Calculate EMI</button>
+  <p v-if="result">Monthly EMI: ₹ {{ result }}</p>
+</div>
+<script>
+const { createApp } = Vue;
+createApp({
+  data(){
+    return{
+      Emi: "",
+      rate: "",
+      time: "",
+      result: ""
+    }
+  },
+  methods:{
+    Check(){
+      if(!this.Emi){
+        alert("Enter your amount");
+        return;
+      }
+      if(!this.rate){
+        alert("Enter your rate");
+        return;
+      }
+      if(!this.time){
+        alert("Enter your time");
+        return;
+      }
+      this.calculateEMI();
+    },
+    calculateEMI(){
+      let P = this.Emi;
+      let r = this.rate / 12 / 100;
+      let n = this.time * 12;
+      let emi = (P * r * Math.pow(1 + r, n)) /
+                (Math.pow(1 + r, n) - 1);
+      this.result = emi.toFixed(2);
+    }
+  }
+}).mount(".app");
+</script>
+</body>
+</html>

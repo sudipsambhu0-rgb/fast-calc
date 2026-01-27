@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Area Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:320px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+      text-align:center;
+    }
+
+    h2{
+      margin-bottom:15px;
+    }
+
+    input, select, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      font-size:15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Area Calculator</h2>
+
+  <select v-model="shape">
+    <option value="square">Square</option>
+    <option value="rectangle">Rectangle</option>
+    <option value="circle">Circle</option>
+    <option value="triangle">Triangle</option>
+  </select>
+
+  <div v-if="shape==='square'">
+    <input type="number" v-model="a" placeholder="Side">
+  </div>
+
+  <div v-if="shape==='rectangle'">
+    <input type="number" v-model="a" placeholder="Length">
+    <input type="number" v-model="b" placeholder="Width">
+  </div>
+
+  <div v-if="shape==='circle'">
+    <input type="number" v-model="a" placeholder="Radius">
+  </div>
+
+  <div v-if="shape==='triangle'">
+    <input type="number" v-model="a" placeholder="Base">
+    <input type="number" v-model="b" placeholder="Height">
+  </div>
+
+  <button @click="calculate">Calculate Area</button>
+
+  <div class="result" v-if="area !== null">
+    <strong>Area = {{ area.toFixed(2) }}</strong>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      shape:"square",
+      a:"",
+      b:"",
+      area:null
+    }
+  },
+  methods:{
+    calculate(){
+      let valA = Number(this.a);
+      let valB = Number(this.b);
+
+      if(this.shape==='square'){
+        if(!valA){ alert("Enter side"); return; }
+        this.area = valA * valA;
+      }
+      else if(this.shape==='rectangle'){
+        if(!valA || !valB){ alert("Enter length & width"); return; }
+        this.area = valA * valB;
+      }
+      else if(this.shape==='circle'){
+        if(!valA){ alert("Enter radius"); return; }
+        this.area = Math.PI * valA * valA;
+      }
+      else if(this.shape==='triangle'){
+        if(!valA || !valB){ alert("Enter base & height"); return; }
+        this.area = 0.5 * valA * valB;
+      }
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

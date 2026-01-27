@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Temperature Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:300px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+      text-align:center;
+    }
+
+    h2{
+      margin-bottom:15px;
+    }
+
+    input, select, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      font-size:15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Temperature Converter</h2>
+
+  <input type="number" v-model="value" placeholder="Enter temperature">
+
+  <select v-model="from">
+    <option value="celsius">Celsius (°C)</option>
+    <option value="fahrenheit">Fahrenheit (°F)</option>
+    <option value="kelvin">Kelvin (K)</option>
+  </select>
+
+  <select v-model="to">
+    <option value="celsius">Celsius (°C)</option>
+    <option value="fahrenheit">Fahrenheit (°F)</option>
+    <option value="kelvin">Kelvin (K)</option>
+  </select>
+
+  <button @click="convert">Convert</button>
+
+  <div class="result" v-if="result !== null">
+    <p>Converted Temperature :</p>
+    <strong>{{ result }} {{ toSymbol }}</strong>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      value:"",
+      from:"celsius",
+      to:"fahrenheit",
+      result:null
+    }
+  },
+  computed:{
+    toSymbol(){
+      if(this.to === "celsius") return "°C";
+      if(this.to === "fahrenheit") return "°F";
+      return "K";
+    }
+  },
+  methods:{
+    convert(){
+      if(this.value === ""){
+        alert("Enter temperature");
+        return;
+      }
+
+      let v = Number(this.value);
+      let res = 0;
+
+      // Celsius
+      if(this.from === "celsius"){
+        if(this.to === "fahrenheit") res = (v * 9/5) + 32;
+        else if(this.to === "kelvin") res = v + 273.15;
+        else res = v;
+      }
+
+      // Fahrenheit
+      else if(this.from === "fahrenheit"){
+        if(this.to === "celsius") res = (v - 32) * 5/9;
+        else if(this.to === "kelvin") res = ((v - 32) * 5/9) + 273.15;
+        else res = v;
+      }
+
+      // Kelvin
+      else if(this.from === "kelvin"){
+        if(this.to === "celsius") res = v - 273.15;
+        else if(this.to === "fahrenheit") res = ((v - 273.15) * 9/5) + 32;
+        else res = v;
+      }
+
+      this.result = res.toFixed(2);
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

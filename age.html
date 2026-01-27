@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:300px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+
+    input, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      font-size:14px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Age Calculator</h2>
+
+  <input type="date" v-model="dob">
+
+  <button @click="calculateAge">Calculate Age</button>
+
+  <div class="result" v-if="age">
+    <p>Age</p>
+    <strong>{{ age.years }} Years</strong><br>
+    <strong>{{ age.months }} Months</strong><br>
+    <strong>{{ age.days }} Days</strong>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      dob: "",
+      age: null
+    }
+  },
+  methods:{
+    calculateAge(){
+      if(!this.dob){
+        alert("Please select date of birth");
+        return;
+      }
+
+      const birthDate = new Date(this.dob);
+      const today = new Date();
+
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+      let days = today.getDate() - birthDate.getDate();
+
+      if(days < 0){
+        months--;
+        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if(months < 0){
+        years--;
+        months += 12;
+      }
+
+      this.age = { years, months, days };
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

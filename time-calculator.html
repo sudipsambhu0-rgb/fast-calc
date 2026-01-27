@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Time Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:320px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+
+    input, select, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      text-align:center;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Time Calculator</h2>
+
+  <input type="number" v-model="h1" placeholder="Hours">
+  <input type="number" v-model="m1" placeholder="Minutes">
+  <input type="number" v-model="s1" placeholder="Seconds">
+
+  <select v-model="operation">
+    <option value="add">Add</option>
+    <option value="subtract">Subtract</option>
+  </select>
+
+  <input type="number" v-model="h2" placeholder="Hours">
+  <input type="number" v-model="m2" placeholder="Minutes">
+  <input type="number" v-model="s2" placeholder="Seconds">
+
+  <button @click="calculate">Calculate</button>
+
+  <div class="result" v-if="result">
+    <p>Result</p>
+    <strong>
+      {{ result.h }} Hours {{ result.m }} Minutes {{ result.s }} Seconds
+    </strong>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      h1:0, m1:0, s1:0,
+      h2:0, m2:0, s2:0,
+      operation:"add",
+      result:null
+    }
+  },
+  methods:{
+    calculate(){
+      let t1 = (Number(this.h1) * 3600) + (Number(this.m1) * 60) + Number(this.s1);
+      let t2 = (Number(this.h2) * 3600) + (Number(this.m2) * 60) + Number(this.s2);
+
+      let totalSeconds = this.operation === "add" ? t1 + t2 : t1 - t2;
+
+      if(totalSeconds < 0){
+        alert("Result time cannot be negative");
+        return;
+      }
+
+      let h = Math.floor(totalSeconds / 3600);
+      let m = Math.floor((totalSeconds % 3600) / 60);
+      let s = totalSeconds % 60;
+
+      this.result = { h, m, s };
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

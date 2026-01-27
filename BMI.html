@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+  *{
+    margin:0;
+    padding:0;
+  }
+  body{
+    min-height:100svh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+      background:linear-gradient(135deg, #0F172A, #020617);
+  }
+  .app {
+    position:relative;
+    height:360px;
+    width:310px;
+    background:#1E293B;
+    border-radius:24px;
+      padding-top:40px;
+        box-shadow:0 20px 40px rgba(0,0,0,0.5);
+  }
+  #x{
+    position:absolute;
+  height:38px;
+  width:200px;
+  left:50px;
+  border:2px solid #38BDF8;
+  border-radius:12px;
+  background:#020617;
+  color:#E5E7EB;
+  font-size:16px;
+  padding-left:12px;
+  outline:none;
+  transition:0.3s;
+  }
+  #y{
+    position:absolute;
+  height:38px;
+  width:200px;
+  top:120px;
+  left:50px;
+  border:2px solid #38BDF8;
+  border-radius:12px;
+  background:#020617;
+  color:#E5E7EB;
+  font-size:16px;
+  padding-left:12px;
+  outline:none;
+  transition:0.3s;  
+  }
+  button{
+    position:absolute;
+    top:230px;
+    left:85px;
+    height:40px;
+    width:140px;
+    border:none;
+    border-radius:14px;
+      background:linear-gradient(135deg, #38BDF8, #22D3EE);
+        color:#020617;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+#btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 10px 20px rgba(56,189,248,0.4);
+}
+#a{
+  position:absolute;
+  top:300px;
+  left:65px;
+  color:#38BDF8;
+  font-size:16px;
+}
+#b{
+  position:absolute;
+  top:350px;
+  left:65px;
+  color:#38BDF8;
+  font-size:16px;
+}
+  
+  </style>
+</head>
+<body>
+<div class="app">
+  <input type="number" id="x"  v-model="weight" placeholder="Enter your weight (kg)">
+  <input type="number" id="y" v-model="height" placeholder="Enter your height (cm)">
+  <button @click="check">Calculate BMI</button>
+
+  <p v-if="BMI" id="a">BMI: {{ BMI }}</p>
+  <p v-if="category" id="b">Category: {{ category }}</p>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      weight: "",
+      height: "",
+      BMI: "",
+      category: ""
+    }
+  },
+  methods:{
+    check(){
+      if(!this.weight){
+        alert("Enter your weight");
+        return;
+      }
+      if(!this.height){
+        alert("Enter your height");
+        return;
+      }
+      this.calculateBMI();
+    },
+
+    calculateBMI(){
+      let h = this.height / 100; // cm → meter
+      let bmi = this.weight / (h * h);
+
+      this.BMI = bmi.toFixed(2);
+
+      // Category logic
+      if(bmi < 18.5){
+        this.category = "Underweight";
+      }
+      else if(bmi < 25){
+        this.category = "Normal";
+      }
+      else if(bmi < 30){
+        this.category = "Overweight";
+      }
+      else{
+        this.category = "Obese";
+      }
+    }
+  }
+}).mount(".app");
+</script>
+  </script>
+</body>
+</html>

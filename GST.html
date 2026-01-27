@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GST Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:300px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+
+    input, select, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>GST Calculator</h2>
+
+  <input type="number" v-model="amount" placeholder="Enter Amount">
+
+  <select v-model="rate">
+    <option disabled value="">Select GST %</option>
+    <option value="5">5%</option>
+    <option value="12">12%</option>
+    <option value="18">18%</option>
+    <option value="28">28%</option>
+  </select>
+
+  <select v-model="type">
+    <option value="add">Add GST</option>
+    <option value="remove">Remove GST</option>
+  </select>
+
+  <button @click="calculate">Calculate</button>
+
+  <div class="result" v-if="gst">
+    <p>GST Amount : ₹ {{ gst }}</p>
+    <p>Final Amount : ₹ {{ total }}</p>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      amount: "",
+      rate: "",
+      type: "add",
+      gst: "",
+      total: ""
+    }
+  },
+  methods:{
+    calculate(){
+      if(this.amount === "" || this.rate === ""){
+        alert("Please fill all fields");
+        return;
+      }
+
+      let amt = Number(this.amount);
+      let r = Number(this.rate);
+
+      if(this.type === "add"){
+        let gstAmt = (amt * r) / 100;
+        this.gst = gstAmt.toFixed(2);
+        this.total = (amt + gstAmt).toFixed(2);
+      }else{
+        let base = amt * 100 / (100 + r);
+        let gstAmt = amt - base;
+        this.gst = gstAmt.toFixed(2);
+        this.total = base.toFixed(2);
+      }
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

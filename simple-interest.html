@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Interest</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+      font-family:Arial;
+    }
+    .app{
+      background:#1E293B;
+      padding:20px;
+      border-radius:12px;
+      color:white;
+      width:280px;
+    }
+    input{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+    button{
+      width:100%;
+      padding:10px;
+      border:none;
+      border-radius:8px;
+      background:#38BDF8;
+      cursor:pointer;
+      font-size:16px;
+    }
+    p{
+      margin-top:10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <input type="number" v-model="principal" placeholder="Enter your principal">
+  <input type="number" v-model="rate" placeholder="Enter your rate (%)">
+  <input type="number" v-model="time" placeholder="Enter your time (years)">
+
+  <button @click="calculate">Calculate</button>
+
+  <p v-if="SI">SI : ₹ {{ SI }}</p>
+  <p v-if="amount">Final Amount : ₹ {{ amount }}</p>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      principal: "",
+      rate: "",
+      time: "",
+      SI: "",
+      amount: ""
+    }
+  },
+  methods:{
+    calculate(){
+      if(this.principal === "" || this.rate === "" || this.time === ""){
+        alert("Please fill all fields");
+        return;
+      }
+
+      let P = Number(this.principal);
+      let R = Number(this.rate);
+      let T = Number(this.time);
+
+      let si = (P * R * T) / 100;
+
+      this.SI = si.toFixed(2);
+      this.amount = (P + si).toFixed(2);
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

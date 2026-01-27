@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Unit Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:320px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+
+    input, select, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      text-align:center;
+      font-size:15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Unit Converter</h2>
+
+  <input type="number" v-model="value" placeholder="Enter value">
+
+  <select v-model="category">
+    <option value="length">Length</option>
+    <option value="weight">Weight</option>
+    <option value="temp">Temperature</option>
+  </select>
+
+  <select v-model="from">
+    <option v-for="u in units[category]" :value="u">{{ u }}</option>
+  </select>
+
+  <select v-model="to">
+    <option v-for="u in units[category]" :value="u">{{ u }}</option>
+  </select>
+
+  <button @click="convert">Convert</button>
+
+  <div class="result" v-if="result !== null">
+    <p>Converted Value</p>
+    <strong>{{ result }}</strong>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      value: "",
+      category: "length",
+      from: "meter",
+      to: "kilometer",
+      result: null,
+      units:{
+        length:["meter","kilometer","centimeter","inch","foot"],
+        weight:["kg","gram","pound"],
+        temp:["celsius","fahrenheit","kelvin"]
+      }
+    }
+  },
+  watch:{
+    category(){
+      this.from = this.units[this.category][0];
+      this.to = this.units[this.category][1];
+      this.result = null;
+    }
+  },
+  methods:{
+    convert(){
+      if(this.value === ""){
+        alert("Enter value");
+        return;
+      }
+
+      let v = Number(this.value);
+      let res = 0;
+
+      /* LENGTH (base = meter) */
+      if(this.category === "length"){
+        const toMeter = {
+          meter:1, kilometer:1000, centimeter:0.01,
+          inch:0.0254, foot:0.3048
+        };
+        res = (v * toMeter[this.from]) / toMeter[this.to];
+      }
+
+      /* WEIGHT (base = kg) */
+      if(this.category === "weight"){
+        const toKg = {
+          kg:1, gram:0.001, pound:0.453592
+        };
+        res = (v * toKg[this.from]) / toKg[this.to];
+      }
+
+      /* TEMPERATURE */
+      if(this.category === "temp"){
+        if(this.from === this.to){
+          res = v;
+        }
+        else if(this.from === "celsius"){
+          res = this.to === "fahrenheit" ? (v * 9/5) + 32 : v + 273.15;
+        }
+        else if(this.from === "fahrenheit"){
+          res = this.to === "celsius" ? (v - 32) * 5/9 : ((v - 32) * 5/9) + 273.15;
+        }
+        else if(this.from === "kelvin"){
+          res = this.to === "celsius" ? v - 273.15 : ((v - 273.15) * 9/5) + 32;
+        }
+      }
+
+      this.result = res.toFixed(4);
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

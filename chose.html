@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      min-height:100vh;
+      background:#0F172A;
+      font-family:Arial, sans-serif;
+    }
+
+    .app{
+      position:relative;
+      padding-bottom:200px;
+    }
+
+    .calc-btn{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      height:60px;
+      width:260px;
+      background:#008CFF;
+      border:4px solid #098CFF;
+      border-radius:30px;
+      font-family:Georgia;
+      color:white;
+      font-size:15px;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+
+    .calc-btn:active{
+      transform:translateX(-50%) scale(0.95);
+    }
+
+    /* Button positions */
+    #btn{top:60px;}
+    #btn1{top:140px;}
+    #btn2{top:220px;}
+    #btn3{top:300px;}
+    #btn4{top:380px;}
+    #btn5{top:460px;}
+    #btn6{top:540px;}
+    #btn7{top:620px;}
+    #btn8{top:700px;}
+    #btn9{top:780px;}
+    #btn10{top:860px;}
+    #btn11{top:940px;}
+    #btn12{top:1020px;}
+    #btn13{top:1100px;}
+    #btn14{top:1180px;}
+    #btn15{top:1260px;}
+    #btn16{top:1340px;}
+    #btn17{top:1420px;}
+    #btn18{top:1500px;}
+    #btn19{top:1580px;}
+    #btn20{top:1660px;}
+    #btn21{top:1740px;}
+    #btn22{top:1820px;}
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <button @click="btn1" class="calc-btn" id="btn">EMI Calculator</button>
+    <button @click="btn2" class="calc-btn" id="btn1">Percentage Calculator</button>
+    <button @click="btn3" class="calc-btn" id="btn2">BMI Calculator</button>
+    <button @click="btn4" class="calc-btn" id="btn3">Simple Interest Calculator</button>
+    <button @click="btn5" class="calc-btn" id="btn4">Compound Interest Calculator</button>
+    <button @click="btn6" class="calc-btn" id="btn5">Age Calculator</button>
+    <button @click="btn7" class="calc-btn" id="btn6">GST Calculator</button>
+    <button @click="btn8" class="calc-btn" id="btn7">Discount Calculator</button>
+    <button @click="btn9" class="calc-btn" id="btn8">Currency Converter</button>
+    <button @click="btn10" class="calc-btn" id="btn9">Loan Eligibility Calculator</button>
+    <button @click="btn11" class="calc-btn" id="btn10">Profit / Loss Calculator</button>
+    <button @click="btn12" class="calc-btn" id="btn11">Unit Converter</button>
+    <button @click="btn13" class="calc-btn" id="btn12">Time Calculator</button>
+    <button @click="btn14" class="calc-btn" id="btn13">Power Calculator</button>
+    <button @click="btn15" class="calc-btn" id="btn14">Square / Cube Calculator</button>
+    <button @click="btn16" class="calc-btn" id="btn15">Average Calculator</button>
+    <button @click="btn17" class="calc-btn" id="btn16">Speed Calculator</button>
+    <button @click="btn18" class="calc-btn" id="btn17">Temperature Converter</button>
+    <button @click="btn19" class="calc-btn" id="btn18">Length Converter</button>
+    <button @click="btn20" class="calc-btn" id="btn19">Area Calculator</button>
+
+    <!-- NEW -->
+    <button @click="btn21" class="calc-btn" id="btn21">Privacy Policy</button>
+    <button @click="btn22" class="calc-btn" id="btn22">Contact Us</button>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      methods:{
+        btn1(){ location.href="EMI.html" },
+        btn2(){ location.href="percentage.html" },
+        btn3(){ location.href="BMI.html" },
+        btn4(){ location.href="simple-interest.html" },
+        btn5(){ location.href="compound-interest.html" },
+        btn6(){ location.href="age.html" },
+        btn7(){ location.href="GST.html" },
+        btn8(){ location.href="discount.html" },
+        btn9(){ location.href="currency.html" },
+        btn10(){ location.href="loan.html" },
+        btn11(){ location.href="profit-loss.html" },
+        btn12(){ location.href="unit-converter.html" },
+        btn13(){ location.href="time-calculator.html" },
+        btn14(){ location.href="power.html" },
+        btn15(){ location.href="square-cube.html" },
+        btn16(){ location.href="average.html" },
+        btn17(){ location.href="speed.html" },
+        btn18(){ location.href="temperature.html" },
+        btn19(){ location.href="length.html" },
+        btn20(){ location.href="area.html" },
+        btn21(){ location.href="privacy.html" },
+        btn22(){ location.href="contact.html" },
+      }
+    }).mount(".app");
+  </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loan EMI Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+
+    .app{
+      width:320px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+
+    input, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0EA5E9;
+    }
+
+    .result{
+      margin-top:10px;
+      font-size:14px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Loan EMI Calculator</h2>
+
+  <input type="number" v-model="loan" placeholder="Loan Amount (₹)">
+  <input type="number" v-model="rate" placeholder="Interest Rate (% per year)">
+  <input type="number" v-model="time" placeholder="Time (Years)">
+
+  <button @click="calculate">Calculate EMI</button>
+
+  <div class="result" v-if="emi">
+    <p>Monthly EMI : ₹ {{ emi }}</p>
+    <p>Total Interest : ₹ {{ interest }}</p>
+    <p>Total Payment : ₹ {{ total }}</p>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      loan: "",
+      rate: "",
+      time: "",
+      emi: "",
+      interest: "",
+      total: ""
+    }
+  },
+  methods:{
+    calculate(){
+      if(this.loan === "" || this.rate === "" || this.time === ""){
+        alert("Please fill all fields");
+        return;
+      }
+
+      let P = Number(this.loan);
+      let R = Number(this.rate) / 12 / 100; // monthly rate
+      let N = Number(this.time) * 12;       // months
+
+      let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+      let totalPayment = EMI * N;
+      let totalInterest = totalPayment - P;
+
+      this.emi = EMI.toFixed(2);
+      this.total = totalPayment.toFixed(2);
+      this.interest = totalInterest.toFixed(2);
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>

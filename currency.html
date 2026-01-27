@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Currency Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0F172A;
+    }
+    .app{
+      width:320px;
+      background:#1E293B;
+      padding:20px;
+      border-radius:15px;
+      color:white;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+    h2{
+      text-align:center;
+      margin-bottom:15px;
+    }
+    input, select, button{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:8px;
+      outline:none;
+    }
+    button{
+      background:#38BDF8;
+      font-size:16px;
+      cursor:pointer;
+    }
+    button:hover{
+      background:#0EA5E9;
+    }
+    .result{
+      margin-top:10px;
+      text-align:center;
+      font-size:15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <h2>Live Currency Converter</h2>
+
+  <input type="number" v-model="amount" placeholder="Enter amount">
+
+  <select v-model="from">
+    <option v-for="c in currencies" :value="c">{{ c }}</option>
+  </select>
+
+  <select v-model="to">
+    <option v-for="c in currencies" :value="c">{{ c }}</option>
+  </select>
+
+  <button @click="convert">Convert</button>
+
+  <div class="result" v-if="result">
+    <p>Converted Amount</p>
+    <strong>{{ result }}</strong>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      amount: "",
+      from: "USD",
+      to: "INR",
+      result: "",
+      rates: {},
+      currencies: ["INR","USD","EUR","GBP","JPY","AUD","CAD"]
+    }
+  },
+  async mounted(){
+    // Fetch live rates (base USD)
+    const res = await fetch("https://open.er-api.com/v6/latest/USD");
+    const data = await res.json();
+    this.rates = data.rates;
+  },
+  methods:{
+    convert(){
+      if(this.amount === ""){
+        alert("Enter amount");
+        return;
+      }
+
+      let amt = Number(this.amount);
+
+      // Convert From → USD → To
+      let usdAmount = amt / this.rates[this.from];
+      let final = usdAmount * this.rates[this.to];
+
+      this.result = final.toFixed(2) + " " + this.to;
+    }
+  }
+}).mount(".app");
+</script>
+
+</body>
+</html>
