@@ -15,21 +15,19 @@
 }
 
 body{
-  min-height:100vh;   /* old browsers */
-  min-height:100svh;  /* mobile safe viewport */
+  min-height:100vh;
+  min-height:100svh;
   background:#11A8FF;
   font-family:Arial, sans-serif;
   position:relative;
 }
 
-/* calculator box */
 #app{
   width:260px;
   margin:40px auto;
   position:relative;
 }
 
-/* display */
 .display{
   background:#222;
   color:#0f0;
@@ -40,7 +38,6 @@ body{
   border-radius:6px;
 }
 
-/* buttons grid */
 .buttons{
   display:grid;
   grid-template-columns:repeat(4, 1fr);
@@ -53,7 +50,7 @@ button{
   cursor:pointer;
 }
 
-/* extra button */
+/* choose button */
 #xy{
   position:absolute;
   top:330px;
@@ -78,7 +75,10 @@ button{
     </button>
   </div>
 
-  <button id="xy">Extra</button>
+  <!-- 🔗 linked button -->
+  <button id="xy" @click="goChoose">
+    Click to choose your calculator
+  </button>
 </div>
 
 <script>
@@ -102,11 +102,14 @@ createApp({
         try{
           this.result = eval(this.result);
         }catch{
-          this.result="Error";
+          this.result = "Error";
         }
       }else{
         this.result += val;
       }
+    },
+    goChoose(){
+      window.location.href = "chose.html";
     }
   }
 }).mount("#app");
