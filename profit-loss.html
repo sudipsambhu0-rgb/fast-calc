@@ -30,7 +30,29 @@ left:40px;
       color:white;
       box-shadow:0 0 20px rgba(0,0,0,0.4);
     }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background: #2563eb; /* blue */
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
 
+  .back-btn:hover {
+    background: #1e40af;
+    transform: translateX(-3px);
+  }
+
+  .back-btn span {
+    font-size: 18px;
+  }
     h2{
       text-align:center;
       margin-bottom:15px;
@@ -72,7 +94,9 @@ left:40px;
 </head>
 
 <body>
-
+<a href="chose.html" class="back-btn">
+  <span>←</span> Back
+</a>
 <div class="app">
   <h2>Profit & Loss</h2>
 
