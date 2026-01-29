@@ -13,19 +13,42 @@ padding:0;
 }
     body{
       min-height:100svh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
       background:#0F172A;
       font-family:Arial;
     }
     .app{
+position:relative;
       background:#1E293B;
       padding:20px;
+top:160px;
+left:40px;
       border-radius:12px;
       color:white;
       width:280px;
     }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background: #2563eb; /* blue */
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .back-btn:hover {
+    background: #1e40af;
+    transform: translateX(-3px);
+  }
+
+  .back-btn span {
+    font-size: 18px;
+  }
     input{
       width:100%;
       padding:10px;
@@ -50,7 +73,9 @@ padding:0;
 </head>
 
 <body>
-
+<a href="chose.html" class="back-btn">
+  <span>←</span> Back
+</a>
 <div class="app">
   <input type="number" v-model="principal" placeholder="Enter your principal">
   <input type="number" v-model="rate" placeholder="Enter your rate (%)">
