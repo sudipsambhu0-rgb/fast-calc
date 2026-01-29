@@ -16,22 +16,44 @@
 
     body{
       min-height:100svh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
       background:#0F172A;
     }
 
     .app{
+position:relative;
       width:300px;
       background:#1E293B;
       padding:20px;
       border-radius:15px;
+top:160px;
+left:40px;
       color:white;
       box-shadow:0 0 20px rgba(0,0,0,0.4);
       text-align:center;
     }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background: #2563eb; /* blue */
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
 
+  .back-btn:hover {
+    background: #1e40af;
+    transform: translateX(-3px);
+  }
+
+  .back-btn span {
+    font-size: 18px;
+  }
     h2{
       margin-bottom:15px;
     }
@@ -64,7 +86,9 @@
 </head>
 
 <body>
-
+<a href="chose.html" class="back-btn">
+  <span>←</span> Back
+</a>
 <div class="app">
   <h2>Power Calculator</h2>
 
