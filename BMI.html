@@ -25,6 +25,29 @@
       padding-top:40px;
         box-shadow:0 20px 40px rgba(0,0,0,0.5);
   }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background: #2563eb; /* blue */
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .back-btn:hover {
+    background: #1e40af;
+    transform: translateX(-3px);
+  }
+
+  .back-btn span {
+    font-size: 18px;
+  }
   #x{
     position:absolute;
   height:38px;
@@ -91,6 +114,9 @@
   </style>
 </head>
 <body>
+<a href="index.html" class="back-btn">
+  <span>←</span> Back
+</a>
 <div class="app">
   <input type="number" id="x"  v-model="weight" placeholder="Enter your weight (kg)">
   <input type="number" id="y" v-model="height" placeholder="Enter your height (cm)">
