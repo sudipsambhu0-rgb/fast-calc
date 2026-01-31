@@ -17,49 +17,83 @@
 body{
   min-height:100vh;
   min-height:100svh;
-  background:#11A8FF;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
   font-family:Arial, sans-serif;
-  position:relative;
 }
 
 #app{
-  width:260px;
-  margin:40px auto;
+  width:280px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.4);
   position:relative;
 }
 
 .display{
-  background:#222;
-  color:#0f0;
-  padding:15px;
-  font-size:24px;
+  background:#111;
+  color:#00ff9c;
+  padding:18px;
+  font-size:26px;
   text-align:right;
-  margin-bottom:10px;
-  border-radius:6px;
+  border-radius:12px;
+  margin-bottom:15px;
+  overflow:hidden;
 }
 
 .buttons{
   display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:10px;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
 }
 
 button{
-  padding:15px;
+  padding:16px;
   font-size:18px;
+  border:none;
+  border-radius:12px;
   cursor:pointer;
+  background:rgba(255,255,255,0.25);
+  color:#fff;
+  transition:0.2s;
+}
+
+button:hover{
+  background:rgba(255,255,255,0.4);
+  transform:scale(1.05);
+}
+
+.operator{
+  background:#ff9500;
+  color:#fff;
+}
+
+.equal{
+  background:#00ff9c;
+  color:#000;
+  font-weight:bold;
+}
+
+.ac{
+  background:#ff3b3b;
+  color:#fff;
+  font-weight:bold;
 }
 
 /* choose button */
 #xy{
-  position:absolute;
-  top:330px;
-  left:10px;
-  font-family:georgia;
+  margin-top:15px;
+  width:100%;
   border-radius:30px;
   background:#7BFF00;
-  border:3px solid #0009FF;
-  padding:10px 20px;
+  border:none;
+  padding:10px;
+  font-weight:bold;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -67,15 +101,26 @@ button{
 <body>
 
 <div id="app">
-  <div class="display">{{ result }}</div>
+  <div class="display">{{ result || "0" }}</div>
 
   <div class="buttons">
-    <button v-for="b in btns" @click="press(b)">
-      {{ b }}
-    </button>
+    <button class="ac" @click="clearAll">AC</button>
+    <button class="operator" @click="press('/')">/</button>
+    <button class="operator" @click="press('*')">*</button>
+    <button class="operator" @click="press('-')">-</button>
+
+    <button v-for="n in ['7','8','9']" @click="press(n)">{{ n }}</button>
+    <button class="operator" @click="press('+')">+</button>
+
+    <button v-for="n in ['4','5','6']" @click="press(n)">{{ n }}</button>
+    <button class="equal" rowspan="2" @click="calculate">=</button>
+
+    <button v-for="n in ['1','2','3']" @click="press(n)">{{ n }}</button>
+
+    <button style="grid-column:span 2" @click="press('0')">0</button>
+    <button @click="press('.')">.</button>
   </div>
 
-  <!-- 🔗 linked button -->
   <button id="xy" @click="goChoose">
     Click to choose your calculator
   </button>
@@ -87,26 +132,22 @@ const { createApp } = Vue;
 createApp({
   data(){
     return{
-      result:"",
-      btns:[
-        "7","8","9","/",
-        "4","5","6","*",
-        "1","2","3","-",
-        "0",".","=","+"
-      ]
+      result:""
     }
   },
   methods:{
     press(val){
-      if(val==="="){
-        try{
-          this.result = eval(this.result);
-        }catch{
-          this.result = "Error";
-        }
-      }else{
-        this.result += val;
+      this.result += val;
+    },
+    calculate(){
+      try{
+        this.result = String(eval(this.result));
+      }catch{
+        this.result = "Error";
       }
+    },
+    clearAll(){
+      this.result = "";
     },
     goChoose(){
       window.location.href = "chose.html";
