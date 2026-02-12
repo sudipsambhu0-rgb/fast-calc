@@ -2,151 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Live Currency Converter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, sans-serif;
-    }
-  body{
-  min-height: 100vh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-}
-    .app{
-position:relative;
-      width:320px;
-      background:#1E293B;
-      padding:20px;
-top:160px;
-left:40px;
-      border-radius:15px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-    h2{
-      text-align:center;
-      margin-bottom:15px;
-    }
-    input, select, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-    button{
-      background:#38BDF8;
-      font-size:16px;
-      cursor:pointer;
-    }
-    button:hover{
-      background:#0EA5E9;
-    }
-    .result{
-      margin-top:10px;
-      text-align:center;
-      font-size:15px;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{min-height:100vh;font-family:Arial,sans-serif;background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),linear-gradient(180deg,#020617,#020617);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
+    .back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:16px;font-weight:500;color:#fff;background:#2563eb;padding:8px 14px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all 0.25s ease;margin-bottom:20px;}
+    .back-btn:hover{background:#1e40af;transform:translateX(-3px);}
+    .back-btn span{font-size:18px;}
+    main.app{position:relative;max-width:360px;width:100%;background:#1E293B;border-radius:24px;padding:40px 20px 60px;box-shadow:0 20px 40px rgba(0,0,0,0.5);}
+    input[type="number"], select{width:100%;height:45px;margin-bottom:20px;border:2px solid #38BDF8;border-radius:12px;padding:0 12px;font-size:16px;background:#020617;color:#E5E7EB;outline:none;transition:0.3s;}
+    button{width:100%;height:45px;border:none;border-radius:14px;background:linear-gradient(135deg,#38BDF8,#22D3EE);color:#020617;font-size:17px;font-weight:600;cursor:pointer;transition:0.3s;}
+    button:hover{transform:scale(1.05);box-shadow:0 10px 20px rgba(56,189,248,0.4);}
+    .result{margin-top:20px;font-size:16px;color:#38BDF8;}
+    .error{margin-top:10px;font-size:14px;color:#F87171;}
+    @media(max-width:400px){main.app{padding:30px 15px 50px;}button,input[type="number"]{height:40px;font-size:15px;}}
   </style>
 </head>
-
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>Live Currency Converter</h2>
+  <a href="index.html" class="back-btn"><span>←</span> Back</a>
 
-  <input type="number" v-model="amount" placeholder="Enter amount">
+  <main class="app" id="currencyApp">
+    <input type="number" v-model="amount" placeholder="Amount">
+    <select v-model="from">
+      <option disabled value="">From Currency</option>
+      <option value="INR">INR</option>
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+    </select>
+    <select v-model="to">
+      <option disabled value="">To Currency</option>
+      <option value="INR">INR</option>
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+    </select>
+    <button @click="convert">Convert</button>
 
-  <select v-model="from">
-    <option v-for="c in currencies" :value="c">{{ c }}</option>
-  </select>
+    <p class="error" v-if="error">{{ error }}</p>
+    <p class="result" v-if="converted">Converted Amount: {{ converted }}</p>
+  </main>
 
-  <select v-model="to">
-    <option v-for="c in currencies" :value="c">{{ c }}</option>
-  </select>
-
-  <button @click="convert">Convert</button>
-
-  <div class="result" v-if="result">
-    <p>Converted Amount</p>
-    <strong>{{ result }}</strong>
-  </div>
-</div>
-
-<script>
-const { createApp } = Vue;
-
-createApp({
-  data(){
-    return{
-      amount: "",
-      from: "USD",
-      to: "INR",
-      result: "",
-      rates: {},
-      currencies: ["INR","USD","EUR","GBP","JPY","AUD","CAD"]
-    }
-  },
-  async mounted(){
-    // Fetch live rates (base USD)
-    const res = await fetch("https://open.er-api.com/v6/latest/USD");
-    const data = await res.json();
-    this.rates = data.rates;
-  },
-  methods:{
-    convert(){
-      if(this.amount === ""){
-        alert("Enter amount");
-        return;
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data(){ 
+        return {
+          amount:"", from:"", to:"", converted:"", error:"",
+          rates:{ "INR":1, "USD":82, "EUR":90 } // Example static rates
+        } 
+      },
+      methods:{
+        convert(){
+          this.error=""; this.converted="";
+          if(!this.amount){this.error="Enter amount"; return;}
+          if(!this.from){this.error="Select from currency"; return;}
+          if(!this.to){this.error="Select to currency"; return;}
+          let amt = Number(this.amount);
+          let result = (amt / this.rates[this.from] * this.rates[this.to]).toFixed(2);
+          this.converted = `${result} ${this.to}`;
+        }
       }
-
-      let amt = Number(this.amount);
-
-      // Convert From → USD → To
-      let usdAmount = amt / this.rates[this.from];
-      let final = usdAmount * this.rates[this.to];
-
-      this.result = final.toFixed(2) + " " + this.to;
-    }
-  }
-}).mount(".app");
-</script>
-
+    }).mount("#currencyApp");
+  </script>
 </body>
 </html>
