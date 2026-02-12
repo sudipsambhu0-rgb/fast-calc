@@ -2,170 +2,186 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Area Calculator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Area Calculator</title>
+  <meta name="description" content="Calculate area of Rectangle, Square, Circle, and Triangle easily.">
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    * { margin:0; padding:0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
       font-family: Arial, sans-serif;
+      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
+                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
+                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
+                  linear-gradient(180deg, #020617, #020617);
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
     }
 
-  body{
-  min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-}
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      background: #2563eb;
+      padding: 8px 14px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
+    .back-btn span { font-size: 18px; }
 
-    .app{
-position:relative;
-      width:320px;
+    main.app {
+      position: relative;
+      max-width: 360px;
+      width: 100%;
       background:#1E293B;
-      padding:20px;
-top:160px;
-left:40px;
-      border-radius:15px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-      text-align:center;
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-
-    h2{
-      margin-bottom:15px;
+      border-radius:24px;
+      padding: 40px 20px 60px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.5);
     }
 
-    input, select, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-
-    button{
-      background:#38BDF8;
+    input[type="number"], select {
+      width: 100%;
+      height: 45px;
+      margin-bottom: 20px;
+      border:2px solid #38BDF8;
+      border-radius:12px;
+      padding: 0 12px;
       font-size:16px;
+      background:#020617;
+      color:#E5E7EB;
+      outline:none;
+      transition:0.3s;
+    }
+
+    button {
+      width: 100%;
+      height: 45px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(135deg, #38BDF8, #22D3EE);
+      color:#020617;
+      font-size:17px;
+      font-weight:600;
       cursor:pointer;
+      transition:0.3s;
+    }
+    button:hover {
+      transform:scale(1.05);
+      box-shadow:0 10px 20px rgba(56,189,248,0.4);
     }
 
-    button:hover{
-      background:#0EA5E9;
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #38BDF8;
     }
 
-    .result{
-      margin-top:10px;
-      font-size:15px;
+    .error {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #F87171;
+    }
+
+    @media(max-width: 400px){
+      main.app { padding: 30px 15px 50px; }
+      button, input[type="number"] { height: 40px; font-size: 15px; }
     }
   </style>
 </head>
-
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>Area Calculator</h2>
+  <a href="index.html" class="back-btn"><span>←</span> Back</a>
 
-  <select v-model="shape">
-    <option value="square">Square</option>
-    <option value="rectangle">Rectangle</option>
-    <option value="circle">Circle</option>
-    <option value="triangle">Triangle</option>
-  </select>
+  <main class="app" id="areaApp">
+    <select v-model="shape">
+      <option disabled value="">Select Shape</option>
+      <option value="rectangle">Rectangle</option>
+      <option value="square">Square</option>
+      <option value="circle">Circle</option>
+      <option value="triangle">Triangle</option>
+    </select>
 
-  <div v-if="shape==='square'">
-    <input type="number" v-model="a" placeholder="Side">
-  </div>
+    <div v-if="shape==='rectangle'">
+      <input type="number" v-model="length" placeholder="Length">
+      <input type="number" v-model="width" placeholder="Width">
+    </div>
 
-  <div v-if="shape==='rectangle'">
-    <input type="number" v-model="a" placeholder="Length">
-    <input type="number" v-model="b" placeholder="Width">
-  </div>
+    <div v-if="shape==='square'">
+      <input type="number" v-model="side" placeholder="Side">
+    </div>
 
-  <div v-if="shape==='circle'">
-    <input type="number" v-model="a" placeholder="Radius">
-  </div>
+    <div v-if="shape==='circle'">
+      <input type="number" v-model="radius" placeholder="Radius">
+    </div>
 
-  <div v-if="shape==='triangle'">
-    <input type="number" v-model="a" placeholder="Base">
-    <input type="number" v-model="b" placeholder="Height">
-  </div>
+    <div v-if="shape==='triangle'">
+      <input type="number" v-model="base" placeholder="Base">
+      <input type="number" v-model="height" placeholder="Height">
+    </div>
 
-  <button @click="calculate">Calculate Area</button>
+    <button @click="calculateArea">Calculate Area</button>
 
-  <div class="result" v-if="area !== null">
-    <strong>Area = {{ area.toFixed(2) }}</strong>
-  </div>
-</div>
+    <p class="error" v-if="error">{{ error }}</p>
+    <p class="result" v-if="area">Area: {{ area }} units²</p>
+  </main>
 
-<script>
-const { createApp } = Vue;
+  <script>
+    const { createApp } = Vue;
 
-createApp({
-  data(){
-    return{
-      shape:"square",
-      a:"",
-      b:"",
-      area:null
-    }
-  },
-  methods:{
-    calculate(){
-      let valA = Number(this.a);
-      let valB = Number(this.b);
+    createApp({
+      data(){
+        return {
+          shape: "",
+          length: "",
+          width: "",
+          side: "",
+          radius: "",
+          base: "",
+          height: "",
+          area: "",
+          error: ""
+        }
+      },
+      methods:{
+        calculateArea(){
+          this.error = "";
+          this.area = "";
 
-      if(this.shape==='square'){
-        if(!valA){ alert("Enter side"); return; }
-        this.area = valA * valA;
+          switch(this.shape){
+            case 'rectangle':
+              if(!this.length) { this.error="Enter length"; return; }
+              if(!this.width) { this.error="Enter width"; return; }
+              this.area = (this.length * this.width).toFixed(2);
+              break;
+            case 'square':
+              if(!this.side) { this.error="Enter side"; return; }
+              this.area = (this.side * this.side).toFixed(2);
+              break;
+            case 'circle':
+              if(!this.radius) { this.error="Enter radius"; return; }
+              this.area = (Math.PI * this.radius * this.radius).toFixed(2);
+              break;
+            case 'triangle':
+              if(!this.base) { this.error="Enter base"; return; }
+              if(!this.height) { this.error="Enter height"; return; }
+              this.area = (0.5 * this.base * this.height).toFixed(2);
+              break;
+            default:
+              this.error = "Select a shape";
+          }
+        }
       }
-      else if(this.shape==='rectangle'){
-        if(!valA || !valB){ alert("Enter length & width"); return; }
-        this.area = valA * valB;
-      }
-      else if(this.shape==='circle'){
-        if(!valA){ alert("Enter radius"); return; }
-        this.area = Math.PI * valA * valA;
-      }
-      else if(this.shape==='triangle'){
-        if(!valA || !valB){ alert("Enter base & height"); return; }
-        this.area = 0.5 * valA * valB;
-      }
-    }
-  }
-}).mount(".app");
-</script>
-
+    }).mount("#areaApp");
+  </script>
 </body>
 </html>
