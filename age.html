@@ -2,153 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Age Calculator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <meta name="description" content="Calculate your exact age in years, months, and days with our online Age Calculator.">
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    * { margin:0; padding:0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
       font-family: Arial, sans-serif;
+      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
+                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
+                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
+                  linear-gradient(180deg, #020617, #020617);
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
     }
 
- body{
-  min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-}
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      background: #2563eb;
+      padding: 8px 14px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
+    .back-btn span { font-size: 18px; }
 
-    .app{
-position:relative;
-      width:300px;
+    main.app {
+      position: relative;
+      max-width: 360px;
+      width: 100%;
       background:#1E293B;
-top:150px;
-left:40px;
-      padding:20px;
-      border-radius:15px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-    h2{
-      text-align:center;
-      margin-bottom:15px;
+      border-radius:24px;
+      padding: 40px 20px 60px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.5);
     }
 
-    input, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-
-    button{
-      background:#38BDF8;
+    input[type="date"] {
+      width: 100%;
+      height: 45px;
+      margin-bottom: 20px;
+      border:2px solid #38BDF8;
+      border-radius:12px;
+      padding: 0 12px;
       font-size:16px;
+      background:#020617;
+      color:#E5E7EB;
+      outline:none;
+      transition:0.3s;
+    }
+
+    button {
+      width: 100%;
+      height: 45px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(135deg, #38BDF8, #22D3EE);
+      color:#020617;
+      font-size:17px;
+      font-weight:600;
       cursor:pointer;
+      transition:0.3s;
+    }
+    button:hover {
+      transform:scale(1.05);
+      box-shadow:0 10px 20px rgba(56,189,248,0.4);
     }
 
-    button:hover{
-      background:#0EA5E9;
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #38BDF8;
     }
 
-    .result{
-      margin-top:10px;
-      font-size:14px;
-      text-align:center;
+    .error {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #F87171;
+    }
+
+    @media(max-width: 400px){
+      main.app { padding: 30px 15px 50px; }
+      button, input[type="date"] { height: 40px; font-size: 15px; }
     }
   </style>
 </head>
-
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>Age Calculator</h2>
+  <a href="index.html" class="back-btn"><span>←</span> Back</a>
 
-  <input type="date" v-model="dob">
+  <main class="app" id="ageApp">
+    <input type="date" v-model="dob" placeholder="Select your Date of Birth">
+    <button @click="calculateAge">Calculate Age</button>
 
-  <button @click="calculateAge">Calculate Age</button>
+    <p class="error" v-if="error">{{ error }}</p>
+    <p class="result" v-if="age">Your Age: {{ age.years }} years, {{ age.months }} months, {{ age.days }} days</p>
+  </main>
 
-  <div class="result" v-if="age">
-    <p>Age</p>
-    <strong>{{ age.years }} Years</strong><br>
-    <strong>{{ age.months }} Months</strong><br>
-    <strong>{{ age.days }} Days</strong>
-  </div>
-</div>
+  <script>
+    const { createApp } = Vue;
 
-<script>
-const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          dob: "",
+          age: null,
+          error: ""
+        }
+      },
+      methods: {
+        calculateAge() {
+          this.error = "";
+          this.age = null;
 
-createApp({
-  data(){
-    return{
-      dob: "",
-      age: null
-    }
-  },
-  methods:{
-    calculateAge(){
-      if(!this.dob){
-        alert("Please select date of birth");
-        return;
+          if(!this.dob){ 
+            this.error = "Please select your Date of Birth";
+            return; 
+          }
+
+          let birthDate = new Date(this.dob);
+          let today = new Date();
+
+          if(birthDate > today){
+            this.error = "DOB cannot be in the future";
+            return;
+          }
+
+          let years = today.getFullYear() - birthDate.getFullYear();
+          let months = today.getMonth() - birthDate.getMonth();
+          let days = today.getDate() - birthDate.getDate();
+
+          if(days < 0){
+            months -= 1;
+            days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+          }
+          if(months < 0){
+            years -= 1;
+            months += 12;
+          }
+
+          this.age = { years, months, days };
+        }
       }
-
-      const birthDate = new Date(this.dob);
-      const today = new Date();
-
-      let years = today.getFullYear() - birthDate.getFullYear();
-      let months = today.getMonth() - birthDate.getMonth();
-      let days = today.getDate() - birthDate.getDate();
-
-      if(days < 0){
-        months--;
-        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-        days += prevMonth.getDate();
-      }
-
-      if(months < 0){
-        years--;
-        months += 12;
-      }
-
-      this.age = { years, months, days };
-    }
-  }
-}).mount(".app");
-</script>
-
+    }).mount("#ageApp");
+  </script>
 </body>
 </html>
