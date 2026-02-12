@@ -3,181 +3,168 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>BMI Calculator</title>
+  <meta name="description" content="Calculate your BMI easily with our online BMI Calculator. Get your category: Underweight, Normal, Overweight, or Obese.">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <style>
-  *{
-    margin:0;
-    padding:0;
-  }
-body{
-  min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-}
-  .app {
-    position:relative;
-    height:360px;
-    width:310px;
-    background:#1E293B;
-top:100px;
-left:40px;
-    border-radius:24px;
-      padding-top:40px;
-        box-shadow:0 20px 40px rgba(0,0,0,0.5);
-  }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
+    * { margin:0; padding:0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
+                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
+                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
+                  linear-gradient(180deg, #020617, #020617);
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
 
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      background: #2563eb;
+      padding: 8px 14px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
+    .back-btn span { font-size: 18px; }
 
-  .back-btn span {
-    font-size: 18px;
-  }
-  #x{
-    position:absolute;
-  height:38px;
-  width:200px;
-  left:50px;
-  border:2px solid #38BDF8;
-  border-radius:12px;
-  background:#020617;
-  color:#E5E7EB;
-  font-size:16px;
-  padding-left:12px;
-  outline:none;
-  transition:0.3s;
-  }
-  #y{
-    position:absolute;
-  height:38px;
-  width:200px;
-  top:120px;
-  left:50px;
-  border:2px solid #38BDF8;
-  border-radius:12px;
-  background:#020617;
-  color:#E5E7EB;
-  font-size:16px;
-  padding-left:12px;
-  outline:none;
-  transition:0.3s;  
-  }
-  button{
-    position:absolute;
-    top:230px;
-    left:85px;
-    height:40px;
-    width:140px;
-    border:none;
-    border-radius:14px;
+    main.app {
+      position: relative;
+      max-width: 360px;
+      width: 100%;
+      background:#1E293B;
+      border-radius:24px;
+      padding: 40px 20px 80px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    input[type="number"] {
+      width: 100%;
+      height: 45px;
+      margin-bottom: 20px;
+      border:2px solid #38BDF8;
+      border-radius:12px;
+      padding: 0 12px;
+      font-size:16px;
+      background:#020617;
+      color:#E5E7EB;
+      outline:none;
+      transition:0.3s;
+    }
+
+    button {
+      width: 100%;
+      height: 45px;
+      border:none;
+      border-radius:14px;
       background:linear-gradient(135deg, #38BDF8, #22D3EE);
-        color:#020617;
-  font-size:17px;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
-}
-#btn:hover{
-  transform:scale(1.05);
-  box-shadow:0 10px 20px rgba(56,189,248,0.4);
-}
-#a{
-  position:absolute;
-  top:300px;
-  left:65px;
-  color:#38BDF8;
-  font-size:16px;
-}
-#b{
-  position:absolute;
-  top:350px;
-  left:65px;
-  color:#38BDF8;
-  font-size:16px;
-}
-  
+      color:#020617;
+      font-size:17px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.3s;
+    }
+    button:hover {
+      transform:scale(1.05);
+      box-shadow:0 10px 20px rgba(56,189,248,0.4);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #38BDF8;
+    }
+
+    .error {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #F87171;
+    }
+
+    /* Adsense placeholder */
+    #adsense {
+      margin-top: 30px;
+      width: 100%;
+      height: 90px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      font-size: 14px;
+      border: 1px dashed #38BDF8;
+    }
+
+    @media(max-width: 400px){
+      main.app { padding: 30px 15px 60px; }
+      button, input[type="number"] { height: 40px; font-size: 15px; }
+    }
   </style>
 </head>
 <body>
-<a href="index.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <input type="number" id="x"  v-model="weight" placeholder="Enter your weight (kg)">
-  <input type="number" id="y" v-model="height" placeholder="Enter your height (cm)">
-  <button @click="check">Calculate BMI</button>
+  <a href="index.html" class="back-btn"><span>←</span> Back</a>
 
-  <p v-if="BMI" id="a">BMI: {{ BMI }}</p>
-  <p v-if="category" id="b">Category: {{ category }}</p>
-</div>
+  <main class="app" id="bmiApp">
+    <input type="number" v-model="weight" placeholder="Enter your weight (kg)">
+    <input type="number" v-model="height" placeholder="Enter your height (cm)">
+    <button @click="check">Calculate BMI</button>
 
-<script>
-const { createApp } = Vue;
+    <p class="error" v-if="error">{{ error }}</p>
+    <p class="result" v-if="BMI">BMI: {{ BMI }}</p>
+    <p class="result" v-if="category">Category: {{ category }}</p>
 
-createApp({
-  data(){
-    return{
-      weight: "",
-      height: "",
-      BMI: "",
-      category: ""
-    }
-  },
-  methods:{
-    check(){
-      if(!this.weight){
-        alert("Enter your weight");
-        return;
-      }
-      if(!this.height){
-        alert("Enter your height");
-        return;
-      }
-      this.calculateBMI();
-    },
+    <!-- Adsense placeholder -->
+    <div id="adsense">AdSense ad will appear here</div>
+  </main>
 
-    calculateBMI(){
-      let h = this.height / 100; // cm → meter
-      let bmi = this.weight / (h * h);
+  <script>
+    const { createApp } = Vue;
 
-      this.BMI = bmi.toFixed(2);
+    createApp({
+      data(){
+        return {
+          weight: "",
+          height: "",
+          BMI: "",
+          category: "",
+          error: ""
+        }
+      },
+      methods:{
+        check(){
+          this.error = "";
+          this.BMI = "";
+          this.category = "";
 
-      // Category logic
-      if(bmi < 18.5){
-        this.category = "Underweight";
+          if(!this.weight) { this.error = "Please enter your weight."; return; }
+          if(!this.height) { this.error = "Please enter your height."; return; }
+
+          this.calculateBMI();
+        },
+        calculateBMI(){
+          let h = this.height / 100;
+          let bmi = this.weight / (h * h);
+          this.BMI = bmi.toFixed(2);
+
+          if(bmi < 18.5) this.category = "Underweight";
+          else if(bmi < 25) this.category = "Normal";
+          else if(bmi < 30) this.category = "Overweight";
+          else this.category = "Obese";
+        }
       }
-      else if(bmi < 25){
-        this.category = "Normal";
-      }
-      else if(bmi < 30){
-        this.category = "Overweight";
-      }
-      else{
-        this.category = "Obese";
-      }
-    }
-  }
-}).mount(".app");
-</script>
+    }).mount("#bmiApp");
   </script>
 </body>
 </html>
