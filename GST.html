@@ -2,160 +2,156 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GST Calculator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GST Calculator</title>
+  <meta name="description" content="Calculate GST easily with our online GST Calculator.">
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    * { margin:0; padding:0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
       font-family: Arial, sans-serif;
+      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
+                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
+                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
+                  linear-gradient(180deg, #020617, #020617);
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
     }
 
-  body{
-  min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-}
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      background: #2563eb;
+      padding: 8px 14px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
+    .back-btn span { font-size: 18px; }
 
-    .app{
-position:relative;
-      width:300px;
+    main.app {
+      position: relative;
+      max-width: 360px;
+      width: 100%;
       background:#1E293B;
-      padding:20px;
-      border-radius:15px;
-top:140px;
-left:40px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-    h2{
-      text-align:center;
-      margin-bottom:15px;
+      border-radius:24px;
+      padding: 40px 20px 60px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.5);
     }
 
-    input, select, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-
-    button{
-      background:#38BDF8;
+    input[type="number"], select {
+      width: 100%;
+      height: 45px;
+      margin-bottom: 20px;
+      border:2px solid #38BDF8;
+      border-radius:12px;
+      padding: 0 12px;
       font-size:16px;
+      background:#020617;
+      color:#E5E7EB;
+      outline:none;
+      transition:0.3s;
+    }
+
+    button {
+      width: 100%;
+      height: 45px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(135deg, #38BDF8, #22D3EE);
+      color:#020617;
+      font-size:17px;
+      font-weight:600;
       cursor:pointer;
+      transition:0.3s;
+    }
+    button:hover {
+      transform:scale(1.05);
+      box-shadow:0 10px 20px rgba(56,189,248,0.4);
     }
 
-    button:hover{
-      background:#0EA5E9;
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #38BDF8;
     }
 
-    .result{
-      margin-top:10px;
-      font-size:14px;
+    .error {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #F87171;
+    }
+
+    @media(max-width: 400px){
+      main.app { padding: 30px 15px 50px; }
+      button, input[type="number"] { height: 40px; font-size: 15px; }
     }
   </style>
 </head>
-
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>GST Calculator</h2>
+  <a href="index.html" class="back-btn"><span>←</span> Back</a>
 
-  <input type="number" v-model="amount" placeholder="Enter Amount">
+  <main class="app" id="gstApp">
+    <input type="number" v-model="amount" placeholder="Enter Amount">
+    <input type="number" v-model="gstRate" placeholder="GST Rate (%)">
+    <select v-model="mode">
+      <option value="add">Add GST</option>
+      <option value="remove">Remove GST</option>
+    </select>
+    <button @click="calculateGST">Calculate GST</button>
 
-  <select v-model="rate">
-    <option disabled value="">Select GST %</option>
-    <option value="5">5%</option>
-    <option value="12">12%</option>
-    <option value="18">18%</option>
-    <option value="28">28%</option>
-  </select>
+    <p class="error" v-if="error">{{ error }}</p>
+    <p class="result" v-if="gstAmount">GST Amount: ₹{{ gstAmount }}</p>
+    <p class="result" v-if="finalAmount">Final Price: ₹{{ finalAmount }}</p>
+  </main>
 
-  <select v-model="type">
-    <option value="add">Add GST</option>
-    <option value="remove">Remove GST</option>
-  </select>
+  <script>
+    const { createApp } = Vue;
 
-  <button @click="calculate">Calculate</button>
+    createApp({
+      data(){
+        return {
+          amount: "",
+          gstRate: "",
+          mode: "add",
+          gstAmount: "",
+          finalAmount: "",
+          error: ""
+        }
+      },
+      methods:{
+        calculateGST(){
+          this.error = "";
+          this.gstAmount = "";
+          this.finalAmount = "";
 
-  <div class="result" v-if="gst">
-    <p>GST Amount : ₹ {{ gst }}</p>
-    <p>Final Amount : ₹ {{ total }}</p>
-  </div>
-</div>
+          if(!this.amount && this.amount !== 0){ this.error="Enter amount"; return; }
+          if(!this.gstRate && this.gstRate !== 0){ this.error="Enter GST rate"; return; }
 
-<script>
-const { createApp } = Vue;
-
-createApp({
-  data(){
-    return{
-      amount: "",
-      rate: "",
-      type: "add",
-      gst: "",
-      total: ""
-    }
-  },
-  methods:{
-    calculate(){
-      if(this.amount === "" || this.rate === ""){
-        alert("Please fill all fields");
-        return;
+          if(this.mode === "add"){
+            let gst = (this.amount * this.gstRate) / 100;
+            this.gstAmount = gst.toFixed(2);
+            this.finalAmount = (Number(this.amount) + gst).toFixed(2);
+          } else if(this.mode === "remove"){
+            let original = (this.amount * 100) / (100 + Number(this.gstRate));
+            let gst = this.amount - original;
+            this.gstAmount = gst.toFixed(2);
+            this.finalAmount = original.toFixed(2);
+          }
+        }
       }
-
-      let amt = Number(this.amount);
-      let r = Number(this.rate);
-
-      if(this.type === "add"){
-        let gstAmt = (amt * r) / 100;
-        this.gst = gstAmt.toFixed(2);
-        this.total = (amt + gstAmt).toFixed(2);
-      }else{
-        let base = amt * 100 / (100 + r);
-        let gstAmt = amt - base;
-        this.gst = gstAmt.toFixed(2);
-        this.total = base.toFixed(2);
-      }
-    }
-  }
-}).mount(".app");
-</script>
-
+    }).mount("#gstApp");
+  </script>
 </body>
 </html>
