@@ -1,158 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Length Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, sans-serif;
-    }
-
-  body{
-  min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-}
-
-    .app{
-position:relative;
-      width:300px;
-      background:#1E293B;
-      padding:20px;
-top:160px;
-left:40px;
-      border-radius:15px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-      text-align:center;
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-    h2{
-      margin-bottom:15px;
-    }
-
-    input, select, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-
-    button{
-      background:#38BDF8;
-      font-size:16px;
-      cursor:pointer;
-    }
-
-    button:hover{
-      background:#0EA5E9;
-    }
-
-    .result{
-      margin-top:10px;
-      font-size:15px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Length Calculator</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:Arial,sans-serif;background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),linear-gradient(180deg,#020617,#020617);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:16px;font-weight:500;color:#fff;background:#2563eb;padding:8px 14px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all 0.25s ease;margin-bottom:20px;}
+.back-btn:hover{background:#1e40af;transform:translateX(-3px);}
+.back-btn span{font-size:18px;}
+main.app{position:relative;max-width:360px;width:100%;background:#1E293B;border-radius:24px;padding:40px 20px 60px;box-shadow:0 20px 40px rgba(0,0,0,0.5);}
+input[type="number"], select{width:100%;height:45px;margin-bottom:20px;border:2px solid #38BDF8;border-radius:12px;padding:0 12px;font-size:16px;background:#020617;color:#E5E7EB;outline:none;transition:0.3s;}
+button{width:100%;height:45px;border:none;border-radius:14px;background:linear-gradient(135deg,#38BDF8,#22D3EE);color:#020617;font-size:17px;font-weight:600;cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.05);box-shadow:0 10px 20px rgba(56,189,248,0.4);}
+.result{margin-top:20px;font-size:16px;color:#38BDF8;}
+.error{margin-top:10px;font-size:14px;color:#F87171;}
+@media(max-width:400px){main.app{padding:30px 15px 50px;}button,input[type="number"]{height:40px;font-size:15px;}}
+</style>
 </head>
-
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>Length Converter</h2>
-
+<a href="index.html" class="back-btn"><span>←</span> Back</a>
+<main class="app" id="lengthApp">
   <input type="number" v-model="value" placeholder="Enter value">
-
-  <select v-model="from">
-    <option v-for="unit in units" :value="unit">{{ unit }}</option>
+  <select v-model="unit">
+    <option disabled value="">Select Unit</option>
+    <option value="m">Meters</option>
+    <option value="cm">Centimeters</option>
+    <option value="mm">Millimeters</option>
+    <option value="km">Kilometers</option>
   </select>
-
-  <select v-model="to">
-    <option v-for="unit in units" :value="unit">{{ unit }}</option>
-  </select>
-
-  <button @click="convert">Convert</button>
-
-  <div class="result" v-if="result !== null">
-    <p>Converted Length :</p>
-    <strong>{{ result }} {{ to }}</strong>
-  </div>
-</div>
-
+  <button @click="convertLength">Convert</button>
+  <p class="error" v-if="error">{{ error }}</p>
+  <p class="result" v-if="result">Converted Values: <br>
+    {{ result.m }} m, {{ result.cm }} cm, {{ result.mm }} mm, {{ result.km }} km
+  </p>
+</main>
 <script>
 const { createApp } = Vue;
-
 createApp({
-  data(){
-    return{
-      value:"",
-      from:"meter",
-      to:"kilometer",
-      result:null,
-      units:["meter","kilometer","centimeter","inch","foot"]
-    }
-  },
+  data(){ return { value:"", unit:"", result:"", error:"" } },
   methods:{
-    convert(){
-      if(this.value === ""){
-        alert("Enter value");
-        return;
-      }
-
-      const toMeter = {
-        meter:1,
-        kilometer:1000,
-        centimeter:0.01,
-        inch:0.0254,
-        foot:0.3048
-      };
-
+    convertLength(){
+      this.error=""; this.result="";
+      if(!this.value){this.error="Enter value"; return;}
       let val = Number(this.value);
-
-      // Convert from "from" to meters, then to "to"
-      let meters = val * toMeter[this.from];
-      let final = meters / toMeter[this.to];
-
-      this.result = final.toFixed(4);
+      let m, cm, mm, km;
+      switch(this.unit){
+        case "m": m=val; cm=val*100; mm=val*1000; km=val/1000; break;
+        case "cm": m=val/100; cm=val; mm=val*10; km=val/100000; break;
+        case "mm": m=val/1000; cm=val/10; mm=val; km=val/1000000; break;
+        case "km": m=val*1000; cm=val*100000; mm=val*1000000; km=val; break;
+        default: this.error="Select a unit"; return;
+      }
+      this.result={m:m.toFixed(2),cm:cm.toFixed(2),mm:mm.toFixed(2),km:km.toFixed(5)};
     }
   }
-}).mount(".app");
+}).mount("#lengthApp");
 </script>
-
 </body>
 </html>
