@@ -4,166 +4,144 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EMI Calculator</title>
+  <meta name="description" content="Calculate your EMI easily with our online EMI Calculator.">
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
+    * { margin:0; padding:0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
+                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
+                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
+                  linear-gradient(180deg, #020617, #020617);
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
 
-body{
-  min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-}
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      background: #2563eb;
+      padding: 8px 14px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
+    .back-btn span { font-size: 18px; }
 
-/* App Card */
-.app{
-  position:relative;
-  height:360px;
-  width:310px;
-  background:#1E293B;
-top:100px;
-left:40px;
-  border-radius:24px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.5);
-  padding-top:40px;
-}
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
+    main.app {
+      position: relative;
+      max-width: 360px;
+      width: 100%;
+      background:#1E293B;
+      border-radius:24px;
+      padding: 40px 20px 60px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.5);
+    }
 
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
+    input[type="number"] {
+      width: 100%;
+      height: 45px;
+      margin-bottom: 20px;
+      border:2px solid #38BDF8;
+      border-radius:12px;
+      padding: 0 12px;
+      font-size:16px;
+      background:#020617;
+      color:#E5E7EB;
+      outline:none;
+      transition:0.3s;
+    }
 
-  .back-btn span {
-    font-size: 18px;
-  }
-/* Common input style */
-input{
-  position:absolute;
-  height:38px;
-  width:200px;
-  left:55px;
-  border:2px solid #38BDF8;
-  border-radius:12px;
-  background:#020617;
-  color:#E5E7EB;
-  font-size:16px;
-  padding-left:12px;
-  outline:none;
-  transition:0.3s;
-}
+    button {
+      width: 100%;
+      height: 45px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(135deg, #38BDF8, #22D3EE);
+      color:#020617;
+      font-size:17px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.3s;
+    }
+    button:hover {
+      transform:scale(1.05);
+      box-shadow:0 10px 20px rgba(56,189,248,0.4);
+    }
 
-input:focus{
-  border-color:#22D3EE;
-  box-shadow:0 0 10px rgba(34,211,238,0.4);
-}
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #38BDF8;
+    }
 
-/* Inputs positioning */
-#EMI{ top:60px; }
-#rate{ top:115px; }
-#time{ top:170px; }
+    .error {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #F87171;
+    }
 
-/* Button */
-#btn{
-  position:absolute;
-  top:230px;
-  left:85px;
-  height:40px;
-  width:140px;
-  border:none;
-  border-radius:14px;
-  background:linear-gradient(135deg, #38BDF8, #22D3EE);
-  color:#020617;
-  font-size:17px;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-#btn:hover{
-  transform:scale(1.05);
-  box-shadow:0 10px 20px rgba(56,189,248,0.4);
-}
-
-/* Result text */
-p{
-  position:absolute;
-  top:290px;
-  left:55px;
-  color:#38BDF8;
-  font-size:16px;
-}
+    @media(max-width: 400px){
+      main.app { padding: 30px 15px 50px; }
+      button, input[type="number"] { height: 40px; font-size: 15px; }
+    }
   </style>
 </head>
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <input type="number" id="EMI" v-model="Emi" placeholder="Enter loan amount">
-  <input type="number" id="rate" v-model="rate" placeholder="Enter rate (%)">
-  <input type="number" id="time" v-model="time" placeholder="Enter time (years)">
-  <button @click="Check" id="btn">Calculate EMI</button>
-  <p v-if="result">Monthly EMI: ₹ {{ result }}</p>
-</div>
-<script>
-const { createApp } = Vue;
-createApp({
-  data(){
-    return{
-      Emi: "",
-      rate: "",
-      time: "",
-      result: ""
-    }
-  },
-  methods:{
-    Check(){
-      if(!this.Emi){
-        alert("Enter your amount");
-        return;
+  <a href="index.html" class="back-btn"><span>←</span> Back</a>
+
+  <main class="app" id="emiApp">
+    <input type="number" v-model="principal" placeholder="Principal Amount (₹)">
+    <input type="number" v-model="rate" placeholder="Interest Rate (%) per annum">
+    <input type="number" v-model="time" placeholder="Time (Years)">
+    <button @click="calculateEMI">Calculate EMI</button>
+
+    <p class="error" v-if="error">{{ error }}</p>
+    <p class="result" v-if="EMI">Monthly EMI: ₹{{ EMI }}</p>
+  </main>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data(){
+        return {
+          principal: "",
+          rate: "",
+          time: "",
+          EMI: "",
+          error: ""
+        }
+      },
+      methods:{
+        calculateEMI(){
+          this.error = "";
+          this.EMI = "";
+
+          if(!this.principal) { this.error="Enter principal amount"; return; }
+          if(!this.rate) { this.error="Enter interest rate"; return; }
+          if(!this.time) { this.error="Enter time in years"; return; }
+
+          let r = (this.rate / 12) / 100;
+          let n = this.time * 12;
+          let emi = (this.principal * r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1);
+
+          this.EMI = emi.toFixed(2);
+        }
       }
-      if(!this.rate){
-        alert("Enter your rate");
-        return;
-      }
-      if(!this.time){
-        alert("Enter your time");
-        return;
-      }
-      this.calculateEMI();
-    },
-    calculateEMI(){
-      let P = this.Emi;
-      let r = this.rate / 12 / 100;
-      let n = this.time * 12;
-      let emi = (P * r * Math.pow(1 + r, n)) /
-                (Math.pow(1 + r, n) - 1);
-      this.result = emi.toFixed(2);
-    }
-  }
-}).mount(".app");
-</script>
+    }).mount("#emiApp");
+  </script>
 </body>
 </html>
