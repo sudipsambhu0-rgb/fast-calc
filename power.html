@@ -1,138 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Power Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body{
-      min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-    }
-
-    .app{
-position:relative;
-      width:300px;
-      background:#1E293B;
-      padding:20px;
-      border-radius:15px;
-top:160px;
-left:40px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-      text-align:center;
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-    h2{
-      margin-bottom:15px;
-    }
-
-    input, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-
-    button{
-      background:#38BDF8;
-      font-size:16px;
-      cursor:pointer;
-    }
-
-    button:hover{
-      background:#0EA5E9;
-    }
-
-    .result{
-      margin-top:10px;
-      font-size:16px;
-      word-wrap:break-word;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Calculator</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:Arial,sans-serif;background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),linear-gradient(180deg,#020617,#020617);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:16px;font-weight:500;color:#fff;background:#2563eb;padding:8px 14px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all 0.25s ease;margin-bottom:20px;}
+.back-btn:hover{background:#1e40af;transform:translateX(-3px);}
+.back-btn span{font-size:18px;}
+main.app{position:relative;max-width:360px;width:100%;background:#1E293B;border-radius:24px;padding:40px 20px 60px;box-shadow:0 20px 40px rgba(0,0,0,0.5);}
+input[type="number"]{width:100%;height:45px;margin-bottom:20px;border:2px solid #38BDF8;border-radius:12px;padding:0 12px;font-size:16px;background:#020617;color:#E5E7EB;outline:none;transition:0.3s;}
+button{width:100%;height:45px;border:none;border-radius:14px;background:linear-gradient(135deg,#38BDF8,#22D3EE);color:#020617;font-size:17px;font-weight:600;cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.05);box-shadow:0 10px 20px rgba(56,189,248,0.4);}
+.result{margin-top:20px;font-size:16px;color:#38BDF8;}
+.error{margin-top:10px;font-size:14px;color:#F87171;}
+@media(max-width:400px){main.app{padding:30px 15px 50px;}button,input[type="number"]{height:40px;font-size:15px;}}
+</style>
 </head>
-
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>Power Calculator</h2>
-
+<a href="index.html" class="back-btn"><span>←</span> Back</a>
+<main class="app" id="powerApp">
   <input type="number" v-model="base" placeholder="Base (a)">
   <input type="number" v-model="exponent" placeholder="Exponent (b)">
-
-  <button @click="calculate">Calculate</button>
-
-  <div class="result" v-if="result !== null">
-    <strong>{{ base }}<sup>{{ exponent }}</sup> = {{ result }}</strong>
-  </div>
-</div>
-
+  <button @click="calculatePower">Calculate a^b</button>
+  <p class="error" v-if="error">{{ error }}</p>
+  <p class="result" v-if="result">Result: {{ result }}</p>
+</main>
 <script>
 const { createApp } = Vue;
-
 createApp({
-  data(){
-    return{
-      base:"",
-      exponent:"",
-      result:null
-    }
-  },
+  data(){ return { base:"", exponent:"", result:"", error:"" } },
   methods:{
-    calculate(){
-      if(this.base === "" || this.exponent === ""){
-        alert("Please fill all fields");
-        return;
-      }
-
-      let a = Number(this.base);
-      let b = Number(this.exponent);
-
-      this.result = Math.pow(a, b);
+    calculatePower(){
+      this.error=""; this.result="";
+      if(this.base===""){this.error="Enter base"; return;}
+      if(this.exponent===""){this.error="Enter exponent"; return;}
+      this.result = Math.pow(Number(this.base), Number(this.exponent));
     }
   }
-}).mount(".app");
+}).mount("#powerApp");
 </script>
-
 </body>
 </html>
