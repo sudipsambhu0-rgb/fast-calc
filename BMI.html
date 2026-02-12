@@ -46,7 +46,7 @@
       width: 100%;
       background:#1E293B;
       border-radius:24px;
-      padding: 40px 20px 80px;
+      padding: 40px 20px 60px;
       box-shadow:0 20px 40px rgba(0,0,0,0.5);
     }
 
@@ -93,22 +93,8 @@
       color: #F87171;
     }
 
-    /* Adsense placeholder */
-    #adsense {
-      margin-top: 30px;
-      width: 100%;
-      height: 90px;
-      background: #1e293b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #888;
-      font-size: 14px;
-      border: 1px dashed #38BDF8;
-    }
-
     @media(max-width: 400px){
-      main.app { padding: 30px 15px 60px; }
+      main.app { padding: 30px 15px 50px; }
       button, input[type="number"] { height: 40px; font-size: 15px; }
     }
   </style>
@@ -124,9 +110,6 @@
     <p class="error" v-if="error">{{ error }}</p>
     <p class="result" v-if="BMI">BMI: {{ BMI }}</p>
     <p class="result" v-if="category">Category: {{ category }}</p>
-
-    <!-- Adsense placeholder -->
-    <div id="adsense">AdSense ad will appear here</div>
   </main>
 
   <script>
