@@ -3,145 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EMI Calculator</title>
-  <meta name="description" content="Calculate your EMI easily with our online EMI Calculator.">
+
+  <title>EMI Calculator – Calculate Monthly Loan EMI Online</title>
+
+  <meta name="description" content="Use our free EMI calculator to calculate your monthly loan payment. Learn EMI formula, interest calculation, and how to plan your loan easily.">
+
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
   <style>
-    * { margin:0; padding:0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-                  linear-gradient(180deg, #020617, #020617);
-      color: #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      color: #fff;
-      background: #2563eb;
-      padding: 8px 14px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      transition: all 0.25s ease;
-      margin-bottom: 20px;
-    }
-    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
-    .back-btn span { font-size: 18px; }
-
-    main.app {
-      position: relative;
-      max-width: 360px;
-      width: 100%;
-      background:#1E293B;
-      border-radius:24px;
-      padding: 40px 20px 60px;
-      box-shadow:0 20px 40px rgba(0,0,0,0.5);
-    }
-
-    input[type="number"] {
-      width: 100%;
-      height: 45px;
-      margin-bottom: 20px;
-      border:2px solid #38BDF8;
-      border-radius:12px;
-      padding: 0 12px;
-      font-size:16px;
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:Arial, sans-serif;
       background:#020617;
-      color:#E5E7EB;
-      outline:none;
-      transition:0.3s;
+      color:#e5e7eb;
+      padding:40px 20px;
+      line-height:1.6;
     }
 
-    button {
-      width: 100%;
-      height: 45px;
+    .container{
+      max-width:800px;
+      margin:auto;
+    }
+
+    h1,h2{margin-bottom:10px;}
+
+    main.app{
+      background:#1E293B;
+      border-radius:20px;
+      padding:25px;
+      margin:20px 0 40px;
+    }
+
+    input,button{
+      width:100%;
+      height:45px;
+      margin-bottom:15px;
+      border-radius:10px;
       border:none;
-      border-radius:14px;
-      background:linear-gradient(135deg, #38BDF8, #22D3EE);
-      color:#020617;
-      font-size:17px;
-      font-weight:600;
+      padding:0 10px;
+    }
+
+    input{
+      border:2px solid #38BDF8;
+      background:#020617;
+      color:#fff;
+    }
+
+    button{
+      background:#38BDF8;
+      color:#000;
+      font-weight:bold;
       cursor:pointer;
-      transition:0.3s;
-    }
-    button:hover {
-      transform:scale(1.05);
-      box-shadow:0 10px 20px rgba(56,189,248,0.4);
     }
 
-    .result {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #38BDF8;
-    }
+    .result{color:#38BDF8;margin-top:10px;}
+    .error{color:#F87171;}
 
-    .error {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #F87171;
-    }
-
-    @media(max-width: 400px){
-      main.app { padding: 30px 15px 50px; }
-      button, input[type="number"] { height: 40px; font-size: 15px; }
+    .content{
+      background:#0f172a;
+      padding:20px;
+      border-radius:12px;
     }
   </style>
 </head>
-<body>
-  <a href="index.html" class="back-btn"><span>←</span> Back</a>
 
+<body>
+<div class="container">
+
+  <h1>EMI Calculator</h1>
+  <p>Use this EMI calculator to quickly estimate your monthly loan payment based on loan amount, interest rate, and loan duration.</p>
+
+  <!-- EMI TOOL -->
   <main class="app" id="emiApp">
-    <input type="number" v-model="principal" placeholder="Principal Amount (₹)">
-    <input type="number" v-model="rate" placeholder="Interest Rate (%) per annum">
-    <input type="number" v-model="time" placeholder="Time (Years)">
+    <input type="number" v-model="principal" placeholder="Loan Amount (₹)">
+    <input type="number" v-model="rate" placeholder="Interest Rate (% per year)">
+    <input type="number" v-model="time" placeholder="Loan Duration (years)">
     <button @click="calculateEMI">Calculate EMI</button>
 
     <p class="error" v-if="error">{{ error }}</p>
     <p class="result" v-if="EMI">Monthly EMI: ₹{{ EMI }}</p>
   </main>
 
-  <script>
-    const { createApp } = Vue;
+  <!-- CONTENT SECTION -->
+  <section class="content">
 
-    createApp({
-      data(){
-        return {
-          principal: "",
-          rate: "",
-          time: "",
-          EMI: "",
-          error: ""
-        }
-      },
-      methods:{
-        calculateEMI(){
-          this.error = "";
-          this.EMI = "";
+    <h2>What is EMI?</h2>
+    <p>EMI (Equated Monthly Installment) is the fixed amount you pay every month to repay your loan. It includes both the principal amount and the interest.</p>
 
-          if(!this.principal) { this.error="Enter principal amount"; return; }
-          if(!this.rate) { this.error="Enter interest rate"; return; }
-          if(!this.time) { this.error="Enter time in years"; return; }
+    <h2>How to Use This EMI Calculator</h2>
+    <ul>
+      <li>Enter your total loan amount</li>
+      <li>Enter annual interest rate</li>
+      <li>Enter loan duration in years</li>
+      <li>Click calculate to get your monthly EMI</li>
+    </ul>
 
-          let r = (this.rate / 12) / 100;
-          let n = this.time * 12;
-          let emi = (this.principal * r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1);
+    <h2>EMI Formula</h2>
+    <p><strong>EMI = [P × r × (1+r)^n] / [(1+r)^n − 1]</strong></p>
+    <p>Where:</p>
+    <ul>
+      <li>P = Loan amount</li>
+      <li>r = Monthly interest rate</li>
+      <li>n = Number of months</li>
+    </ul>
 
-          this.EMI = emi.toFixed(2);
-        }
-      }
-    }).mount("#emiApp");
-  </script>
+    <h2>Example EMI Calculation</h2>
+    <p>Loan Amount: ₹1,00,000</p>
+    <p>Interest Rate: 10% per year</p>
+    <p>Duration: 2 years</p>
+    <p>Your EMI will be calculated monthly based on these values.</p>
+
+    <h2>Why EMI Planning is Important</h2>
+    <p>Understanding your EMI helps you manage your finances better, avoid loan stress, and plan your savings efficiently.</p>
+
+    <h2>Tips to Reduce EMI</h2>
+    <ul>
+      <li>Choose longer tenure</li>
+      <li>Make higher down payment</li>
+      <li>Look for lower interest rates</li>
+      <li>Prepay loan when possible</li>
+    </ul>
+
+    <h2>Important Note</h2>
+    <p>This calculator provides an estimate and may vary slightly depending on lender policies.</p>
+
+  </section>
+
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      principal:"",
+      rate:"",
+      time:"",
+      EMI:"",
+      error:""
+    }
+  },
+  methods:{
+    calculateEMI(){
+      this.error="";
+      this.EMI="";
+
+      if(!this.principal){this.error="Enter loan amount";return;}
+      if(!this.rate){this.error="Enter interest rate";return;}
+      if(!this.time){this.error="Enter duration";return;}
+
+      let r = (this.rate/12)/100;
+      let n = this.time*12;
+
+      let emi = (this.principal*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+
+      this.EMI = emi.toFixed(2);
+    }
+  }
+}).mount("#emiApp");
+</script>
+
 </body>
 </html>
