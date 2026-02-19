@@ -3,55 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profit/Loss Calculator</title>
+
+<title>Profit and Loss Calculator – Calculate Profit, Loss & Percentage</title>
+<meta name="description" content="Calculate profit, loss and profit percentage easily using our free online calculator.">
+
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{min-height:100vh;font-family:Arial,sans-serif;background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),linear-gradient(180deg,#020617,#020617);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
-.back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:16px;font-weight:500;color:#fff;background:#2563eb;padding:8px 14px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all 0.25s ease;margin-bottom:20px;}
-.back-btn:hover{background:#1e40af;transform:translateX(-3px);}
-.back-btn span{font-size:18px;}
-main.app{position:relative;max-width:360px;width:100%;background:#1E293B;border-radius:24px;padding:40px 20px 60px;box-shadow:0 20px 40px rgba(0,0,0,0.5);}
-input[type="number"]{width:100%;height:45px;margin-bottom:20px;border:2px solid #38BDF8;border-radius:12px;padding:0 12px;font-size:16px;background:#020617;color:#E5E7EB;outline:none;transition:0.3s;}
-button{width:100%;height:45px;border:none;border-radius:14px;background:linear-gradient(135deg,#38BDF8,#22D3EE);color:#020617;font-size:17px;font-weight:600;cursor:pointer;transition:0.3s;}
-button:hover{transform:scale(1.05);box-shadow:0 10px 20px rgba(56,189,248,0.4);}
-.result{margin-top:20px;font-size:16px;color:#38BDF8;}
-.error{margin-top:10px;font-size:14px;color:#F87171;}
-@media(max-width:400px){main.app{padding:30px 15px 50px;}button,input[type="number"]{height:40px;font-size:15px;}}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.result{color:#38BDF8;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
 </style>
 </head>
+
 <body>
-<a href="index.html" class="back-btn"><span>←</span> Back</a>
+<div class="container">
+
+<h1>Profit and Loss Calculator</h1>
+
 <main class="app" id="plApp">
-  <input type="number" v-model="cost" placeholder="Cost Price">
-  <input type="number" v-model="sell" placeholder="Selling Price">
-  <button @click="calculatePL">Calculate Profit / Loss</button>
-  <p class="error" v-if="error">{{ error }}</p>
-  <p class="result" v-if="message">{{ message }}</p>
+<input type="number" v-model="cost" placeholder="Cost Price">
+<input type="number" v-model="sell" placeholder="Selling Price">
+
+<button @click="calc">Calculate</button>
+
+<p class="result" v-if="result">{{ result }}</p>
 </main>
+
+<section class="content">
+<h2>Understanding Profit and Loss</h2>
+<p>Profit and loss calculation is essential in business, trading, and daily financial decisions. Profit occurs when the selling price is greater than the cost price, while loss happens when the cost price is higher than the selling price.</p>
+
+<p>This calculator helps you instantly determine whether you made a profit or loss and also shows the percentage. It is useful for shop owners, students, online sellers, and anyone managing finances.</p>
+
+<p>The basic formula for profit is: Profit = Selling Price − Cost Price. The profit percentage is calculated as (Profit / Cost Price) × 100. Similarly, loss is calculated when cost price is greater than selling price.</p>
+
+<p>Understanding profit and loss helps you make better pricing decisions, manage expenses, and grow your business. It is also useful for comparing deals, discounts, and investment returns.</p>
+
+<p>Simply enter your cost price and selling price in the calculator and click calculate. You will instantly see whether you made profit or loss along with percentage.</p>
+
+<p>Financial awareness is an important skill in life. By regularly using this calculator, you can improve your money management skills and avoid unnecessary losses.</p>
+</section>
+
+</div>
+
 <script>
-const { createApp } = Vue;
+const {createApp} = Vue;
+
 createApp({
-  data(){ return { cost:"", sell:"", message:"", error:"" } },
-  methods:{
-    calculatePL(){
-      this.error=""; this.message="";
-      if(!this.cost){this.error="Enter cost price"; return;}
-      if(!this.sell){this.error="Enter selling price"; return;}
-      let cp = Number(this.cost);
-      let sp = Number(this.sell);
-      if(sp>cp){
-        let profit = sp-cp;
-        this.message=`Profit: ₹${profit}`;
-      } else if(cp>sp){
-        let loss = cp-sp;
-        this.message=`Loss: ₹${loss}`;
-      } else{
-        this.message="No Profit, No Loss";
-      }
-    }
-  }
+data(){
+return{
+cost:"",
+sell:"",
+result:""
+}
+},
+methods:{
+calc(){
+let diff = this.sell - this.cost;
+let percent = (Math.abs(diff)/this.cost)*100;
+
+if(diff>0){
+this.result = "Profit: ₹"+diff.toFixed(2)+" ("+percent.toFixed(2)+"%)";
+}else if(diff<0){
+this.result = "Loss: ₹"+Math.abs(diff).toFixed(2)+" ("+percent.toFixed(2)+"%)";
+}else{
+this.result = "No Profit No Loss";
+}
+}
+}
 }).mount("#plApp");
 </script>
+
 </body>
 </html>
