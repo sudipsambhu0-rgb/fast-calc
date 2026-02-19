@@ -3,48 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simple Interest Calculator</title>
+
+<title>Simple Interest Calculator – Calculate Interest Easily</title>
+<meta name="description" content="Calculate simple interest and total amount easily using our free online simple interest calculator.">
+
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{min-height:100vh;font-family:Arial,sans-serif;background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),linear-gradient(180deg,#020617,#020617);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
-.back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:16px;font-weight:500;color:#fff;background:#2563eb;padding:8px 14px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all 0.25s ease;margin-bottom:20px;}
-.back-btn:hover{background:#1e40af;transform:translateX(-3px);}
-.back-btn span{font-size:18px;}
-main.app{position:relative;max-width:360px;width:100%;background:#1E293B;border-radius:24px;padding:40px 20px 60px;box-shadow:0 20px 40px rgba(0,0,0,0.5);}
-input[type="number"]{width:100%;height:45px;margin-bottom:20px;border:2px solid #38BDF8;border-radius:12px;padding:0 12px;font-size:16px;background:#020617;color:#E5E7EB;outline:none;transition:0.3s;}
-button{width:100%;height:45px;border:none;border-radius:14px;background:linear-gradient(135deg,#38BDF8,#22D3EE);color:#020617;font-size:17px;font-weight:600;cursor:pointer;transition:0.3s;}
-button:hover{transform:scale(1.05);box-shadow:0 10px 20px rgba(56,189,248,0.4);}
-.result{margin-top:20px;font-size:16px;color:#38BDF8;}
-.error{margin-top:10px;font-size:14px;color:#F87171;}
-@media(max-width:400px){main.app{padding:30px 15px 50px;}button,input[type="number"]{height:40px;font-size:15px;}}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.result{color:#38BDF8;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
 </style>
 </head>
+
 <body>
-<a href="index.html" class="back-btn"><span>←</span> Back</a>
+<div class="container">
+
+<h1>Simple Interest Calculator</h1>
+
 <main class="app" id="siApp">
-  <input type="number" v-model="principal" placeholder="Principal Amount">
-  <input type="number" v-model="rate" placeholder="Rate (%)">
-  <input type="number" v-model="time" placeholder="Time (Years)">
-  <button @click="calculateSI">Calculate Simple Interest</button>
-  <p class="error" v-if="error">{{ error }}</p>
-  <p class="result" v-if="interest">Simple Interest: ₹{{ interest }}</p>
+<input type="number" v-model="principal" placeholder="Principal Amount (₹)">
+<input type="number" v-model="rate" placeholder="Interest Rate (%)">
+<input type="number" v-model="time" placeholder="Time (years)">
+
+<button @click="calc">Calculate</button>
+
+<p class="result" v-if="interest">Interest: ₹{{ interest }}</p>
+<p class="result" v-if="total">Total Amount: ₹{{ total }}</p>
 </main>
+
+<section class="content">
+<h2>What is Simple Interest?</h2>
+<p>Simple interest is a basic method of calculating the interest charged or earned on a loan or investment. It is calculated only on the principal amount and does not include interest on previously earned interest. The formula for simple interest is: Interest = (Principal × Rate × Time) ÷ 100.</p>
+
+<p>This calculator helps you quickly determine how much interest you will earn or pay over a period of time. It is useful for students, lenders, borrowers, and anyone dealing with financial planning.</p>
+
+<p>Simple interest is commonly used in short-term loans, personal lending, and basic financial calculations. It is easy to understand and does not involve complex compounding formulas.</p>
+
+<p>To use this tool, enter the principal amount, interest rate, and time duration. Click calculate and the calculator will show both the interest amount and the total payable amount instantly.</p>
+
+<p>Understanding simple interest helps you make better financial decisions and compare loan options easily.</p>
+</section>
+
+</div>
+
 <script>
-const { createApp } = Vue;
+const {createApp} = Vue;
+
 createApp({
-  data(){ return { principal:"", rate:"", time:"", interest:"", error:"" } },
-  methods:{
-    calculateSI(){
-      this.error=""; this.interest="";
-      if(!this.principal){this.error="Enter principal"; return;}
-      if(!this.rate){this.error="Enter rate"; return;}
-      if(!this.time){this.error="Enter time"; return;}
-      let SI = (Number(this.principal)*Number(this.rate)*Number(this.time))/100;
-      this.interest = SI.toFixed(2);
-    }
-  }
+data(){
+return{
+principal:"",
+rate:"",
+time:"",
+interest:"",
+total:""
+}
+},
+methods:{
+calc(){
+let si=(this.principal*this.rate*this.time)/100;
+this.interest=si.toFixed(2);
+this.total=(parseFloat(this.principal)+si).toFixed(2);
+}
+}
 }).mount("#siApp");
 </script>
+
 </body>
 </html>
