@@ -1,41 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compound Interest Calculator</title>
-<meta name="description" content="Calculate compound interest online. Find your investment growth with our compound interest calculator.">
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Compound Interest Calculator – Investment Growth Tool</title>
+  <meta name="description" content="Calculate compound interest online and see how your investment grows over time.">
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      font-family:Arial,sans-serif;
+      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
+                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
+                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
+                  linear-gradient(180deg,#020617,#020617);
+      color:#e5e7eb;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:40px 20px;
+    }
+
+    .back-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      text-decoration:none;color:#fff;background:#2563eb;
+      padding:8px 14px;border-radius:8px;margin-bottom:20px;
+    }
+
+    main.app{
+      max-width:360px;width:100%;
+      background:#1E293B;border-radius:24px;
+      padding:40px 20px 60px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    input{
+      width:100%;height:45px;margin-bottom:20px;
+      border:2px solid #38BDF8;border-radius:12px;
+      padding:0 12px;background:#020617;color:#fff;
+    }
+
+    button{
+      width:100%;height:45px;border:none;border-radius:14px;
+      background:linear-gradient(135deg,#38BDF8,#22D3EE);
+      color:#020617;font-weight:600;cursor:pointer;
+    }
+
+    .result{margin-top:20px;color:#38BDF8;}
+    .error{color:#F87171;}
+  </style>
 </head>
 
-<body style="font-family:Arial;background:#020617;color:#e5e7eb;padding:40px">
+<body>
 
-<h1>Compound Interest Calculator</h1>
-<p>Calculate how your investment grows with compound interest.</p>
+<a href="index.html" class="back-btn">← Back</a>
 
-<div id="ciApp">
-<input v-model="principal" placeholder="Principal (₹)">
-<input v-model="rate" placeholder="Rate %">
-<input v-model="time" placeholder="Time (years)">
-<button @click="calc">Calculate</button>
+<main class="app" id="ciApp">
+  <input type="number" v-model="principal" placeholder="Principal Amount (₹)">
+  <input type="number" v-model="rate" placeholder="Interest Rate (%)">
+  <input type="number" v-model="time" placeholder="Time (Years)">
+  <button @click="calc">Calculate</button>
 
-<p v-if="result">Total Amount: ₹{{ result }}</p>
-</div>
-
-<h2>Formula</h2>
-<p>A = P(1 + r/n)<sup>nt</sup></p>
+  <p class="error" v-if="error">{{error}}</p>
+  <p class="result" v-if="amount">Total Amount: ₹{{amount}}</p>
+</main>
 
 <script>
-const { createApp } = Vue;
+const {createApp}=Vue;
 createApp({
-data(){return{principal:"",rate:"",time:"",result:""}},
+data(){return{principal:"",rate:"",time:"",amount:"",error:""}},
 methods:{
 calc(){
+this.error=""; this.amount="";
+if(!this.principal){this.error="Enter principal";return;}
+if(!this.rate){this.error="Enter rate";return;}
+if(!this.time){this.error="Enter time";return;}
+
 let P=this.principal;
 let r=this.rate/100;
 let t=this.time;
+
 let A=P*Math.pow((1+r),t);
-this.result=A.toFixed(2);
+this.amount=A.toFixed(2);
 }
 }
 }).mount("#ciApp");
