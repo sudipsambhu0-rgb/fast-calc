@@ -1,33 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Discount Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Discount Calculator – Calculate Sale Price Easily</title>
+<meta name="description" content="Calculate discount and final price instantly using our free discount calculator.">
+
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+min-height:100vh;
+font-family:Arial,sans-serif;
+background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
+            radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
+            radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
+            linear-gradient(180deg,#020617,#020617);
+color:#e5e7eb;
+display:flex;flex-direction:column;align-items:center;
+padding:40px 20px;
+}
+
+.back-btn{
+display:inline-flex;align-items:center;gap:6px;
+text-decoration:none;color:#fff;background:#2563eb;
+padding:8px 14px;border-radius:8px;margin-bottom:20px;
+}
+
+main.app{
+max-width:360px;width:100%;
+background:#1E293B;border-radius:24px;
+padding:40px 20px 60px;
+box-shadow:0 20px 40px rgba(0,0,0,0.5);
+}
+
+input{
+width:100%;height:45px;margin-bottom:20px;
+border:2px solid #38BDF8;border-radius:12px;
+padding:0 12px;background:#020617;color:#fff;
+}
+
+button{
+width:100%;height:45px;border:none;border-radius:14px;
+background:linear-gradient(135deg,#38BDF8,#22D3EE);
+color:#020617;font-weight:600;cursor:pointer;
+}
+
+.result{margin-top:20px;color:#38BDF8;}
+.error{color:#F87171;}
+</style>
 </head>
 
-<body style="font-family:Arial;background:#020617;color:#fff;padding:40px">
+<body>
 
-<h1>Discount Calculator</h1>
+<a href="index.html" class="back-btn">← Back</a>
 
-<div id="discApp">
-<input v-model="price" placeholder="Original Price">
-<input v-model="discount" placeholder="Discount %">
-
+<main class="app" id="discApp">
+<input type="number" v-model="price" placeholder="Original Price (₹)">
+<input type="number" v-model="discount" placeholder="Discount (%)">
 <button @click="calc">Calculate</button>
 
-<p v-if="final">Final Price: {{ final }}</p>
-</div>
+<p class="error" v-if="error">{{error}}</p>
+<p class="result" v-if="final">Final Price: ₹{{final}}</p>
+<p class="result" v-if="saved">You Save: ₹{{saved}}</p>
+</main>
 
 <script>
-const { createApp } = Vue;
+const {createApp}=Vue;
 createApp({
-data(){return{price:"",discount:"",final:""}},
+data(){return{price:"",discount:"",final:"",saved:"",error:""}},
 methods:{
 calc(){
+this.error=""; this.final=""; this.saved="";
+
+if(!this.price){this.error="Enter price";return;}
+if(!this.discount){this.error="Enter discount";return;}
+
 let p=this.price;
 let d=this.discount;
-let f=p-(p*d/100);
+
+let save=p*d/100;
+let f=p-save;
+
+this.saved=save.toFixed(2);
 this.final=f.toFixed(2);
 }
 }
