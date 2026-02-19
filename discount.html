@@ -1,94 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discount Calculator – Calculate Sale Price & Savings</title>
 
-<title>Discount Calculator – Calculate Sale Price Easily</title>
-<meta name="description" content="Calculate discount and final price instantly using our free discount calculator.">
+  <meta name="description" content="Free online discount calculator to calculate final price after discount and savings. Perfect for shopping, sales, and offers."/>
+  <meta name="keywords" content="discount calculator, sale price calculator, percentage off calculator, savings calculator"/>
+  <meta name="author" content="Sandip Roy"/>
 
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-min-height:100vh;
-font-family:Arial,sans-serif;
-background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-            radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-            radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-            linear-gradient(180deg,#020617,#020617);
-color:#e5e7eb;
-display:flex;flex-direction:column;align-items:center;
-padding:40px 20px;
-}
-
-.back-btn{
-display:inline-flex;align-items:center;gap:6px;
-text-decoration:none;color:#fff;background:#2563eb;
-padding:8px 14px;border-radius:8px;margin-bottom:20px;
-}
-
-main.app{
-max-width:360px;width:100%;
-background:#1E293B;border-radius:24px;
-padding:40px 20px 60px;
-box-shadow:0 20px 40px rgba(0,0,0,0.5);
-}
-
-input{
-width:100%;height:45px;margin-bottom:20px;
-border:2px solid #38BDF8;border-radius:12px;
-padding:0 12px;background:#020617;color:#fff;
-}
-
-button{
-width:100%;height:45px;border:none;border-radius:14px;
-background:linear-gradient(135deg,#38BDF8,#22D3EE);
-color:#020617;font-weight:600;cursor:pointer;
-}
-
-.result{margin-top:20px;color:#38BDF8;}
-.error{color:#F87171;}
-</style>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      margin:0;
+      padding:0;
+      background:#0f172a;
+      color:white;
+    }
+    .container{
+      max-width:900px;
+      margin:auto;
+      padding:20px;
+    }
+    .card{
+      background:#1e293b;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+    }
+    input{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border-radius:8px;
+      border:none;
+      font-size:16px;
+    }
+    button{
+      margin-top:15px;
+      padding:12px;
+      width:100%;
+      border:none;
+      border-radius:8px;
+      background:#22c55e;
+      color:black;
+      font-weight:bold;
+      cursor:pointer;
+    }
+    h1,h2{
+      color:#38bdf8;
+    }
+    .result{
+      margin-top:15px;
+      font-size:18px;
+      color:#facc15;
+    }
+    .info p{
+      line-height:1.6;
+      color:#e2e8f0;
+    }
+  </style>
 </head>
-
 <body>
 
-<a href="index.html" class="back-btn">← Back</a>
+<div class="container">
 
-<main class="app" id="discApp">
-<input type="number" v-model="price" placeholder="Original Price (₹)">
-<input type="number" v-model="discount" placeholder="Discount (%)">
-<button @click="calc">Calculate</button>
+  <div class="card">
+    <h1>Discount Calculator</h1>
 
-<p class="error" v-if="error">{{error}}</p>
-<p class="result" v-if="final">Final Price: ₹{{final}}</p>
-<p class="result" v-if="saved">You Save: ₹{{saved}}</p>
-</main>
+    <label>Original Price</label>
+    <input type="number" id="price" placeholder="Enter original price">
+
+    <label>Discount (%)</label>
+    <input type="number" id="discount" placeholder="Enter discount percentage">
+
+    <button onclick="calcDiscount()">Calculate Discount</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- CONTENT SECTION FOR ADSENSE -->
+  <div class="card info">
+    <h2>What is a Discount Calculator?</h2>
+    <p>
+      A discount calculator is a simple tool used to calculate the final price of a product after applying a percentage discount. It helps shoppers quickly determine how much money they save during sales, offers, or promotional deals.
+    </p>
+
+    <h2>How to Calculate Discount?</h2>
+    <p>
+      The formula to calculate discount is:
+      <br><br>
+      <b>Discount Amount = Original Price × Discount % ÷ 100</b>
+      <br><br>
+      <b>Final Price = Original Price − Discount Amount</b>
+    </p>
+
+    <h2>Example</h2>
+    <p>
+      If a product costs ₹1000 and has a 20% discount:
+      <br>
+      Discount = ₹200  
+      Final Price = ₹800
+    </p>
+
+    <h2>Where is Discount Calculator Useful?</h2>
+    <p>
+      • Online shopping <br>
+      • Festival sales <br>
+      • Supermarket offers <br>
+      • Business pricing decisions <br>
+      • Budget planning
+    </p>
+
+    <h2>Why Use Our Calculator?</h2>
+    <p>
+      Our free online discount calculator is fast, accurate, and mobile friendly. You can calculate discounts instantly without doing manual calculations.
+    </p>
+  </div>
+
+</div>
 
 <script>
-const {createApp}=Vue;
-createApp({
-data(){return{price:"",discount:"",final:"",saved:"",error:""}},
-methods:{
-calc(){
-this.error=""; this.final=""; this.saved="";
+function calcDiscount(){
+  const price = parseFloat(document.getElementById("price").value);
+  const discount = parseFloat(document.getElementById("discount").value);
 
-if(!this.price){this.error="Enter price";return;}
-if(!this.discount){this.error="Enter discount";return;}
+  if(!price || !discount){
+    document.getElementById("result").innerHTML = "Please enter valid values";
+    return;
+  }
 
-let p=this.price;
-let d=this.discount;
+  const discountAmount = price * discount / 100;
+  const finalPrice = price - discountAmount;
 
-let save=p*d/100;
-let f=p-save;
-
-this.saved=save.toFixed(2);
-this.final=f.toFixed(2);
+  document.getElementById("result").innerHTML =
+    "You Save: ₹" + discountAmount.toFixed(2) + "<br>Final Price: ₹" + finalPrice.toFixed(2);
 }
-}
-}).mount("#discApp");
 </script>
 
 </body>
