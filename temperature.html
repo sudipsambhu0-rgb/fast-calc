@@ -3,41 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Temperature Converter</title>
-<meta name="description" content="Convert temperature between Celsius, Fahrenheit, and Kelvin.">
+
+<title>Temperature Converter – Convert Celsius, Fahrenheit, Kelvin</title>
+<meta name="description" content="Convert temperature units easily between Celsius, Fahrenheit and Kelvin.">
+
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<style>/* same UI styles */</style>
 </head>
 
-<body style="font-family:Arial;background:#020617;color:#fff;padding:40px">
+<body>
+<div class="container">
 
 <h1>Temperature Converter</h1>
 
-<div id="tempApp">
-<input v-model="value" placeholder="Enter value">
-<select v-model="type">
-<option value="c">Celsius</option>
-<option value="f">Fahrenheit</option>
-<option value="k">Kelvin</option>
+<main class="app" id="tempApp">
+<input type="number" v-model="value" placeholder="Enter Temperature">
+
+<select v-model="from">
+<option value="C">Celsius</option>
+<option value="F">Fahrenheit</option>
+<option value="K">Kelvin</option>
 </select>
+
+<select v-model="to">
+<option value="F">Fahrenheit</option>
+<option value="C">Celsius</option>
+<option value="K">Kelvin</option>
+</select>
+
 <button @click="convert">Convert</button>
 
-<p v-if="result">{{ result }}</p>
+<p class="result" v-if="result">Result: {{ result }}</p>
+</main>
+
+<section class="content">
+<h2>About Temperature Conversion</h2>
+<p>Temperature is an important measurement used in science, weather forecasting, cooking, and daily life. Different countries use different temperature units such as Celsius, Fahrenheit, and Kelvin.</p>
+
+<p>This converter helps you easily switch between these temperature units instantly.</p>
+
+<p>For example, water freezes at 0°C, 32°F, and 273.15K. Understanding temperature conversion is useful in science experiments and real life applications.</p>
+
+<p>Simply enter the temperature value, select the units, and click convert to get the result instantly.</p>
+
+<p>This tool is accurate, fast, and easy to use for students and professionals.</p>
+</section>
+
 </div>
 
 <script>
-const { createApp } = Vue;
+const {createApp} = Vue;
+
 createApp({
-data(){return{value:"",type:"c",result:""}},
+data(){
+return{
+value:"",
+from:"C",
+to:"F",
+result:""
+}
+},
 methods:{
 convert(){
-let v=parseFloat(this.value);
-if(this.type=="c"){
-this.result="F: "+((v*9/5)+32)+" | K: "+(v+273.15);
-}else if(this.type=="f"){
-this.result="C: "+((v-32)*5/9)+" | K: "+(((v-32)*5/9)+273.15);
-}else{
-this.result="C: "+(v-273.15)+" | F: "+(((v-273.15)*9/5)+32);
-}
+let v=this.value;
+
+if(this.from==="C" && this.to==="F") this.result=(v*9/5+32).toFixed(2)+" °F";
+else if(this.from==="F" && this.to==="C") this.result=((v-32)*5/9).toFixed(2)+" °C";
+else if(this.from==="C" && this.to==="K") this.result=(v+273.15).toFixed(2)+" K";
+else if(this.from==="K" && this.to==="C") this.result=(v-273.15).toFixed(2)+" °C";
+else if(this.from==="F" && this.to==="K") this.result=((v-32)*5/9+273.15).toFixed(2)+" K";
+else if(this.from==="K" && this.to==="F") this.result=((v-273.15)*9/5+32).toFixed(2)+" °F";
+else this.result=v;
 }
 }
 }).mount("#tempApp");
