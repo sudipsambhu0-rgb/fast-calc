@@ -1,187 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Area Calculator</title>
-  <meta name="description" content="Calculate area of Rectangle, Square, Circle, and Triangle easily.">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <style>
-    * { margin:0; padding:0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-                  linear-gradient(180deg, #020617, #020617);
-      color: #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Area Calculator – Square, Rectangle, Circle, Triangle</title>
+<meta name="description" content="Calculate area of square, rectangle, circle, and triangle easily using our free online area calculator.">
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      color: #fff;
-      background: #2563eb;
-      padding: 8px 14px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      transition: all 0.25s ease;
-      margin-bottom: 20px;
-    }
-    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
-    .back-btn span { font-size: 18px; }
-
-    main.app {
-      position: relative;
-      max-width: 360px;
-      width: 100%;
-      background:#1E293B;
-      border-radius:24px;
-      padding: 40px 20px 60px;
-      box-shadow:0 20px 40px rgba(0,0,0,0.5);
-    }
-
-    input[type="number"], select {
-      width: 100%;
-      height: 45px;
-      margin-bottom: 20px;
-      border:2px solid #38BDF8;
-      border-radius:12px;
-      padding: 0 12px;
-      font-size:16px;
-      background:#020617;
-      color:#E5E7EB;
-      outline:none;
-      transition:0.3s;
-    }
-
-    button {
-      width: 100%;
-      height: 45px;
-      border:none;
-      border-radius:14px;
-      background:linear-gradient(135deg, #38BDF8, #22D3EE);
-      color:#020617;
-      font-size:17px;
-      font-weight:600;
-      cursor:pointer;
-      transition:0.3s;
-    }
-    button:hover {
-      transform:scale(1.05);
-      box-shadow:0 10px 20px rgba(56,189,248,0.4);
-    }
-
-    .result {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #38BDF8;
-    }
-
-    .error {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #F87171;
-    }
-
-    @media(max-width: 400px){
-      main.app { padding: 30px 15px 50px; }
-      button, input[type="number"] { height: 40px; font-size: 15px; }
-    }
-  </style>
+<style>
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px;}
+.container{max-width:800px;margin:auto;}
+main{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,select,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input,select{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.content{background:#0f172a;padding:20px;border-radius:12px;}
+.result{color:#38BDF8;}
+</style>
 </head>
+
 <body>
-  <a href="index.html" class="back-btn"><span>←</span> Back</a>
+<div class="container">
 
-  <main class="app" id="areaApp">
-    <select v-model="shape">
-      <option disabled value="">Select Shape</option>
-      <option value="rectangle">Rectangle</option>
-      <option value="square">Square</option>
-      <option value="circle">Circle</option>
-      <option value="triangle">Triangle</option>
-    </select>
+<h1>Area Calculator</h1>
+<p>Calculate area of different shapes easily.</p>
 
-    <div v-if="shape==='rectangle'">
-      <input type="number" v-model="length" placeholder="Length">
-      <input type="number" v-model="width" placeholder="Width">
-    </div>
+<main id="areaApp">
 
-    <div v-if="shape==='square'">
-      <input type="number" v-model="side" placeholder="Side">
-    </div>
+<select v-model="shape">
+<option value="square">Square</option>
+<option value="rectangle">Rectangle</option>
+<option value="circle">Circle</option>
+<option value="triangle">Triangle</option>
+</select>
 
-    <div v-if="shape==='circle'">
-      <input type="number" v-model="radius" placeholder="Radius">
-    </div>
+<input type="number" v-model="a" placeholder="Enter value 1">
+<input type="number" v-model="b" placeholder="Enter value 2 (if required)">
 
-    <div v-if="shape==='triangle'">
-      <input type="number" v-model="base" placeholder="Base">
-      <input type="number" v-model="height" placeholder="Height">
-    </div>
+<button @click="calcArea">Calculate Area</button>
 
-    <button @click="calculateArea">Calculate Area</button>
+<p class="result" v-if="area">Area: {{ area }}</p>
 
-    <p class="error" v-if="error">{{ error }}</p>
-    <p class="result" v-if="area">Area: {{ area }} units²</p>
-  </main>
+</main>
 
-  <script>
-    const { createApp } = Vue;
+<section class="content">
+<h2>Shapes Supported</h2>
+<ul>
+<li>Square</li>
+<li>Rectangle</li>
+<li>Circle</li>
+<li>Triangle</li>
+</ul>
 
-    createApp({
-      data(){
-        return {
-          shape: "",
-          length: "",
-          width: "",
-          side: "",
-          radius: "",
-          base: "",
-          height: "",
-          area: "",
-          error: ""
-        }
-      },
-      methods:{
-        calculateArea(){
-          this.error = "";
-          this.area = "";
+<h2>Formulas</h2>
+<p>Square = a²</p>
+<p>Rectangle = length × width</p>
+<p>Circle = πr²</p>
+<p>Triangle = ½ × base × height</p>
+</section>
 
-          switch(this.shape){
-            case 'rectangle':
-              if(!this.length) { this.error="Enter length"; return; }
-              if(!this.width) { this.error="Enter width"; return; }
-              this.area = (this.length * this.width).toFixed(2);
-              break;
-            case 'square':
-              if(!this.side) { this.error="Enter side"; return; }
-              this.area = (this.side * this.side).toFixed(2);
-              break;
-            case 'circle':
-              if(!this.radius) { this.error="Enter radius"; return; }
-              this.area = (Math.PI * this.radius * this.radius).toFixed(2);
-              break;
-            case 'triangle':
-              if(!this.base) { this.error="Enter base"; return; }
-              if(!this.height) { this.error="Enter height"; return; }
-              this.area = (0.5 * this.base * this.height).toFixed(2);
-              break;
-            default:
-              this.error = "Select a shape";
-          }
-        }
-      }
-    }).mount("#areaApp");
-  </script>
+</div>
+
+<script>
+const {createApp}=Vue;
+createApp({
+data(){return{shape:"square",a:"",b:"",area:""}},
+methods:{
+calcArea(){
+let a=parseFloat(this.a);
+let b=parseFloat(this.b);
+
+if(this.shape==="square") this.area=(a*a).toFixed(2);
+else if(this.shape==="rectangle") this.area=(a*b).toFixed(2);
+else if(this.shape==="circle") this.area=(3.1416*a*a).toFixed(2);
+else if(this.shape==="triangle") this.area=(0.5*a*b).toFixed(2);
+}
+}
+}).mount("#areaApp");
+</script>
+
 </body>
 </html>
