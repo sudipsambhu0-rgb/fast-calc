@@ -1,157 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Time Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, sans-serif;
-    }
+<title>Average Calculator – Calculate Mean of Numbers Easily</title>
+<meta name="description" content="Calculate the average (mean) of numbers easily using our free online average calculator. Perfect for students, finance, and daily use.">
 
-    body{
-    min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-    }
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-    .app{
-position:relative;
-      width:320px;
-      background:#1E293B;
-      padding:20px;
-top:160px;
-left:40px;
-      border-radius:15px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-    h2{
-      text-align:center;
-      margin-bottom:15px;
-    }
-
-    input, select, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-
-    button{
-      background:#38BDF8;
-      font-size:16px;
-      cursor:pointer;
-    }
-
-    button:hover{
-      background:#0EA5E9;
-    }
-
-    .result{
-      margin-top:10px;
-      text-align:center;
-      font-size:14px;
-    }
-  </style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.result{color:#38BDF8;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
+</style>
 </head>
 
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>Time Calculator</h2>
+<div class="container">
 
-  <input type="number" v-model="h1" placeholder="Hours">
-  <input type="number" v-model="m1" placeholder="Minutes">
-  <input type="number" v-model="s1" placeholder="Seconds">
+<h1>Average Calculator</h1>
+<p>Calculate the mean (average) of multiple numbers instantly using this simple tool.</p>
 
-  <select v-model="operation">
-    <option value="add">Add</option>
-    <option value="subtract">Subtract</option>
-  </select>
+<main class="app" id="avgApp">
+<input type="text" v-model="numbers" placeholder="Enter numbers separated by commas (e.g. 10,20,30)">
 
-  <input type="number" v-model="h2" placeholder="Hours">
-  <input type="number" v-model="m2" placeholder="Minutes">
-  <input type="number" v-model="s2" placeholder="Seconds">
+<button @click="calc">Calculate Average</button>
 
-  <button @click="calculate">Calculate</button>
+<p class="result" v-if="average">Average: {{ average }}</p>
+</main>
 
-  <div class="result" v-if="result">
-    <p>Result</p>
-    <strong>
-      {{ result.h }} Hours {{ result.m }} Minutes {{ result.s }} Seconds
-    </strong>
-  </div>
+<section class="content">
+<h2>What is Average?</h2>
+<p>The average, also known as the mean, is one of the most commonly used mathematical calculations. It represents the central value of a group of numbers. The formula for average is: Average = Sum of all values ÷ Number of values.</p>
+
+<p>For example, if you have numbers 10, 20, and 30, the average will be (10 + 20 + 30) ÷ 3 = 20. The average helps us understand the overall trend or typical value in a dataset.</p>
+
+<p>This calculator allows you to quickly compute the average of multiple numbers. You just need to enter the numbers separated by commas and click the calculate button. The tool will instantly show you the average value.</p>
+
+<p>Average is widely used in many real life situations. Students use it to calculate marks and grades. Businesses use it to analyze sales data and performance. In finance, it is used to understand income, expenses, and investment returns.</p>
+
+<p>Understanding averages helps in better decision making and data analysis. It reduces complex numbers into a single meaningful value that is easy to understand.</p>
+
+<p>This calculator is fast, accurate, and easy to use. It helps you avoid manual calculation errors and saves your time.</p>
+</section>
+
 </div>
 
 <script>
-const { createApp } = Vue;
+const {createApp} = Vue;
 
 createApp({
-  data(){
-    return{
-      h1:0, m1:0, s1:0,
-      h2:0, m2:0, s2:0,
-      operation:"add",
-      result:null
-    }
-  },
-  methods:{
-    calculate(){
-      let t1 = (Number(this.h1) * 3600) + (Number(this.m1) * 60) + Number(this.s1);
-      let t2 = (Number(this.h2) * 3600) + (Number(this.m2) * 60) + Number(this.s2);
+data(){
+return{
+numbers:"",
+average:""
+}
+},
+methods:{
+calc(){
+let arr = this.numbers.split(",").map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
 
-      let totalSeconds = this.operation === "add" ? t1 + t2 : t1 - t2;
-
-      if(totalSeconds < 0){
-        alert("Result time cannot be negative");
-        return;
-      }
-
-      let h = Math.floor(totalSeconds / 3600);
-      let m = Math.floor((totalSeconds % 3600) / 60);
-      let s = totalSeconds % 60;
-
-      this.result = { h, m, s };
-    }
-  }
-}).mount(".app");
+let sum = arr.reduce((a,b)=>a+b,0);
+this.average = (sum/arr.length).toFixed(2);
+}
+}
+}).mount("#avgApp");
 </script>
 
 </body>
