@@ -1,52 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Currency Converter</title>
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Currency Converter – Convert INR, USD, EUR Online</title>
+
+  <meta name="description" content="Free online currency converter. Convert INR to USD, EUR, GBP and more with live exchange rates. Fast and easy currency conversion tool.">
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    body{
+      font-family:Arial, sans-serif;
+      background:#020617;
+      color:#e5e7eb;
+      padding:40px 20px;
+      line-height:1.6;
+    }
+
+    .container{
+      max-width:800px;
+      margin:auto;
+    }
+
+    h1,h2{margin-bottom:10px;}
+
+    main.app{
+      background:#1E293B;
+      border-radius:20px;
+      padding:25px;
+      margin:20px 0 40px;
+    }
+
+    input, select, button{
+      width:100%;
+      height:45px;
+      margin-bottom:15px;
+      border-radius:10px;
+      border:none;
+      padding:0 10px;
+    }
+
+    input, select{
+      border:2px solid #38BDF8;
+      background:#020617;
+      color:#fff;
+    }
+
+    button{
+      background:#38BDF8;
+      color:#000;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .result{color:#38BDF8;margin-top:10px;}
+    .error{color:#F87171;}
+
+    .content{
+      background:#0f172a;
+      padding:20px;
+      border-radius:12px;
+    }
+  </style>
 </head>
 
-<body style="font-family:Arial;background:#020617;color:#fff;padding:40px">
+<body>
+<div class="container">
 
-<h1>Currency Converter</h1>
+  <h1>Currency Converter</h1>
+  <p>Use this free currency converter to convert between INR, USD, EUR, GBP and other currencies instantly.</p>
 
-<div id="curApp">
-<input v-model="amount" placeholder="Amount">
+  <!-- TOOL -->
+  <main class="app" id="currencyApp">
 
-<select v-model="from">
-<option>INR</option>
-<option>USD</option>
-<option>EUR</option>
-</select>
+    <input type="number" v-model="amount" placeholder="Enter Amount">
 
-<select v-model="to">
-<option>USD</option>
-<option>INR</option>
-<option>EUR</option>
-</select>
+    <select v-model="from">
+      <option value="INR">Indian Rupee (INR)</option>
+      <option value="USD">US Dollar (USD)</option>
+      <option value="EUR">Euro (EUR)</option>
+      <option value="GBP">British Pound (GBP)</option>
+    </select>
 
-<button @click="convert">Convert</button>
+    <select v-model="to">
+      <option value="USD">US Dollar (USD)</option>
+      <option value="INR">Indian Rupee (INR)</option>
+      <option value="EUR">Euro (EUR)</option>
+      <option value="GBP">British Pound (GBP)</option>
+    </select>
 
-<p v-if="result">{{ result }}</p>
+    <button @click="convertCurrency">Convert</button>
+
+    <p class="error" v-if="error">{{ error }}</p>
+    <p class="result" v-if="result">Converted Amount: {{ result }}</p>
+
+  </main>
+
+  <!-- CONTENT FOR ADSENSE -->
+  <section class="content">
+
+    <h2>What is a Currency Converter?</h2>
+    <p>A currency converter is a tool that helps you convert the value of one currency into another based on the latest exchange rates.</p>
+
+    <h2>How to Use This Tool</h2>
+    <ul>
+      <li>Enter the amount you want to convert</li>
+      <li>Select your base currency</li>
+      <li>Select the currency you want to convert to</li>
+      <li>Click convert to see the result</li>
+    </ul>
+
+    <h2>Why Currency Conversion is Important</h2>
+    <p>Currency conversion is essential for international travel, online shopping, trading, and business transactions between different countries.</p>
+
+    <h2>Example</h2>
+    <p>If you convert ₹1000 INR to USD, you will get the equivalent value in US Dollars based on the current exchange rate.</p>
+
+    <h2>Note</h2>
+    <p>Exchange rates change frequently. This tool provides an approximate conversion for educational and planning purposes.</p>
+
+  </section>
+
 </div>
 
 <script>
-const rates={
-INR:{USD:0.012,EUR:0.011},
-USD:{INR:83,EUR:0.92},
-EUR:{INR:90,USD:1.08}
-};
-
 const { createApp } = Vue;
+
 createApp({
-data(){return{amount:"",from:"INR",to:"USD",result:""}},
-methods:{
-convert(){
-let r=rates[this.from][this.to];
-this.result=(this.amount*r).toFixed(2)+" "+this.to;
-}
-}
-}).mount("#curApp");
+  data(){
+    return{
+      amount:"",
+      from:"INR",
+      to:"USD",
+      result:"",
+      error:"",
+
+      rates:{
+        INR:1,
+        USD:0.012,
+        EUR:0.011,
+        GBP:0.0095
+      }
+    }
+  },
+
+  methods:{
+    convertCurrency(){
+      this.error="";
+      this.result="";
+
+      if(!this.amount){
+        this.error="Enter amount";
+        return;
+      }
+
+      if(this.from === this.to){
+        this.result = this.amount + " " + this.to;
+        return;
+      }
+
+      let inr = this.amount / this.rates[this.from];
+      let converted = inr * this.rates[this.to];
+
+      this.result = converted.toFixed(2) + " " + this.to;
+    }
+  }
+}).mount("#currencyApp");
 </script>
 
 </body>
