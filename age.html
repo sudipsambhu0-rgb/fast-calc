@@ -1,161 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Age Calculator</title>
-  <meta name="description" content="Calculate your exact age in years, months, and days with our online Age Calculator.">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <style>
-    * { margin:0; padding:0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-                  linear-gradient(180deg, #020617, #020617);
-      color: #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Age Calculator – Calculate Your Exact Age Online</title>
+<meta name="description" content="Free age calculator to find your exact age in years, months, and days. Easy and accurate online age calculation tool.">
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      color: #fff;
-      background: #2563eb;
-      padding: 8px 14px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      transition: all 0.25s ease;
-      margin-bottom: 20px;
-    }
-    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
-    .back-btn span { font-size: 18px; }
-
-    main.app {
-      position: relative;
-      max-width: 360px;
-      width: 100%;
-      background:#1E293B;
-      border-radius:24px;
-      padding: 40px 20px 60px;
-      box-shadow:0 20px 40px rgba(0,0,0,0.5);
-    }
-
-    input[type="date"] {
-      width: 100%;
-      height: 45px;
-      margin-bottom: 20px;
-      border:2px solid #38BDF8;
-      border-radius:12px;
-      padding: 0 12px;
-      font-size:16px;
-      background:#020617;
-      color:#E5E7EB;
-      outline:none;
-      transition:0.3s;
-    }
-
-    button {
-      width: 100%;
-      height: 45px;
-      border:none;
-      border-radius:14px;
-      background:linear-gradient(135deg, #38BDF8, #22D3EE);
-      color:#020617;
-      font-size:17px;
-      font-weight:600;
-      cursor:pointer;
-      transition:0.3s;
-    }
-    button:hover {
-      transform:scale(1.05);
-      box-shadow:0 10px 20px rgba(56,189,248,0.4);
-    }
-
-    .result {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #38BDF8;
-    }
-
-    .error {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #F87171;
-    }
-
-    @media(max-width: 400px){
-      main.app { padding: 30px 15px 50px; }
-      button, input[type="date"] { height: 40px; font-size: 15px; }
-    }
-  </style>
+<style>
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.content{background:#0f172a;padding:20px;border-radius:12px;}
+.result{color:#38BDF8;}
+</style>
 </head>
+
 <body>
-  <a href="index.html" class="back-btn"><span>←</span> Back</a>
+<div class="container">
 
-  <main class="app" id="ageApp">
-    <input type="date" v-model="dob" placeholder="Select your Date of Birth">
-    <button @click="calculateAge">Calculate Age</button>
+<h1>Age Calculator</h1>
+<p>Use this free age calculator to find your exact age in years, months, and days.</p>
 
-    <p class="error" v-if="error">{{ error }}</p>
-    <p class="result" v-if="age">Your Age: {{ age.years }} years, {{ age.months }} months, {{ age.days }} days</p>
-  </main>
+<main id="ageApp">
+<input type="date" v-model="dob">
+<button @click="calcAge">Calculate Age</button>
 
-  <script>
-    const { createApp } = Vue;
+<p class="result" v-if="age">
+Age: {{ age.years }} years, {{ age.months }} months, {{ age.days }} days
+</p>
+</main>
 
-    createApp({
-      data() {
-        return {
-          dob: "",
-          age: null,
-          error: ""
-        }
-      },
-      methods: {
-        calculateAge() {
-          this.error = "";
-          this.age = null;
+<section class="content">
+<h2>What is Age Calculator?</h2>
+<p>This tool calculates your exact age from your date of birth to today's date.</p>
 
-          if(!this.dob){ 
-            this.error = "Please select your Date of Birth";
-            return; 
-          }
+<h2>How it Works</h2>
+<ul>
+<li>Select your date of birth</li>
+<li>Click calculate</li>
+<li>Get your age instantly</li>
+</ul>
 
-          let birthDate = new Date(this.dob);
-          let today = new Date();
+<h2>Why Use Age Calculator?</h2>
+<p>Useful for school forms, job applications, and official documents.</p>
+</section>
 
-          if(birthDate > today){
-            this.error = "DOB cannot be in the future";
-            return;
-          }
+</div>
 
-          let years = today.getFullYear() - birthDate.getFullYear();
-          let months = today.getMonth() - birthDate.getMonth();
-          let days = today.getDate() - birthDate.getDate();
+<script>
+const {createApp}=Vue;
+createApp({
+data(){return{dob:"",age:null}},
+methods:{
+calcAge(){
+let birth=new Date(this.dob);
+let today=new Date();
 
-          if(days < 0){
-            months -= 1;
-            days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-          }
-          if(months < 0){
-            years -= 1;
-            months += 12;
-          }
+let years=today.getFullYear()-birth.getFullYear();
+let months=today.getMonth()-birth.getMonth();
+let days=today.getDate()-birth.getDate();
 
-          this.age = { years, months, days };
-        }
-      }
-    }).mount("#ageApp");
-  </script>
+if(days<0){months--;days+=30;}
+if(months<0){years--;months+=12;}
+
+this.age={years,months,days};
+}
+}
+}).mount("#ageApp");
+</script>
+
 </body>
 </html>
