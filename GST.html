@@ -3,155 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GST Calculator</title>
-  <meta name="description" content="Calculate GST easily with our online GST Calculator.">
+
+  <title>GST Calculator – Add or Remove GST Online</title>
+
+  <meta name="description" content="Use our free GST calculator to add or remove GST from any amount. Learn GST formula, tax rates, and how GST works in India.">
+
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
   <style>
-    * { margin:0; padding:0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-                  radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-                  radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-                  linear-gradient(180deg, #020617, #020617);
-      color: #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      color: #fff;
-      background: #2563eb;
-      padding: 8px 14px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      transition: all 0.25s ease;
-      margin-bottom: 20px;
-    }
-    .back-btn:hover { background: #1e40af; transform: translateX(-3px); }
-    .back-btn span { font-size: 18px; }
-
-    main.app {
-      position: relative;
-      max-width: 360px;
-      width: 100%;
-      background:#1E293B;
-      border-radius:24px;
-      padding: 40px 20px 60px;
-      box-shadow:0 20px 40px rgba(0,0,0,0.5);
-    }
-
-    input[type="number"], select {
-      width: 100%;
-      height: 45px;
-      margin-bottom: 20px;
-      border:2px solid #38BDF8;
-      border-radius:12px;
-      padding: 0 12px;
-      font-size:16px;
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:Arial, sans-serif;
       background:#020617;
-      color:#E5E7EB;
-      outline:none;
-      transition:0.3s;
+      color:#e5e7eb;
+      padding:40px 20px;
+      line-height:1.6;
     }
 
-    button {
-      width: 100%;
-      height: 45px;
+    .container{max-width:800px;margin:auto;}
+
+    h1,h2{margin-bottom:10px;}
+
+    main.app{
+      background:#1E293B;
+      border-radius:20px;
+      padding:25px;
+      margin:20px 0 40px;
+    }
+
+    input,select,button{
+      width:100%;
+      height:45px;
+      margin-bottom:15px;
+      border-radius:10px;
       border:none;
-      border-radius:14px;
-      background:linear-gradient(135deg, #38BDF8, #22D3EE);
-      color:#020617;
-      font-size:17px;
-      font-weight:600;
+      padding:0 10px;
+    }
+
+    input,select{
+      border:2px solid #38BDF8;
+      background:#020617;
+      color:#fff;
+    }
+
+    button{
+      background:#38BDF8;
+      color:#000;
+      font-weight:bold;
       cursor:pointer;
-      transition:0.3s;
-    }
-    button:hover {
-      transform:scale(1.05);
-      box-shadow:0 10px 20px rgba(56,189,248,0.4);
     }
 
-    .result {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #38BDF8;
-    }
+    .result{color:#38BDF8;margin-top:10px;}
+    .error{color:#F87171;}
 
-    .error {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #F87171;
-    }
-
-    @media(max-width: 400px){
-      main.app { padding: 30px 15px 50px; }
-      button, input[type="number"] { height: 40px; font-size: 15px; }
+    .content{
+      background:#0f172a;
+      padding:20px;
+      border-radius:12px;
     }
   </style>
 </head>
-<body>
-  <a href="index.html" class="back-btn"><span>←</span> Back</a>
 
+<body>
+<div class="container">
+
+  <h1>GST Calculator</h1>
+  <p>Use this GST calculator to quickly add or remove GST from any amount. Perfect for businesses, billing, and tax calculations in India.</p>
+
+  <!-- GST TOOL -->
   <main class="app" id="gstApp">
-    <input type="number" v-model="amount" placeholder="Enter Amount">
-    <input type="number" v-model="gstRate" placeholder="GST Rate (%)">
-    <select v-model="mode">
+    <input type="number" v-model="amount" placeholder="Enter Amount (₹)">
+
+    <select v-model="gstRate">
+      <option value="">Select GST Rate</option>
+      <option value="5">5%</option>
+      <option value="12">12%</option>
+      <option value="18">18%</option>
+      <option value="28">28%</option>
+    </select>
+
+    <select v-model="type">
       <option value="add">Add GST</option>
       <option value="remove">Remove GST</option>
     </select>
+
     <button @click="calculateGST">Calculate GST</button>
 
     <p class="error" v-if="error">{{ error }}</p>
-    <p class="result" v-if="gstAmount">GST Amount: ₹{{ gstAmount }}</p>
-    <p class="result" v-if="finalAmount">Final Price: ₹{{ finalAmount }}</p>
+
+    <div v-if="finalAmount">
+      <p class="result">GST Amount: ₹{{ gstAmount }}</p>
+      <p class="result">Final Amount: ₹{{ finalAmount }}</p>
+    </div>
   </main>
 
-  <script>
-    const { createApp } = Vue;
+  <!-- CONTENT SECTION -->
+  <section class="content">
 
-    createApp({
-      data(){
-        return {
-          amount: "",
-          gstRate: "",
-          mode: "add",
-          gstAmount: "",
-          finalAmount: "",
-          error: ""
-        }
-      },
-      methods:{
-        calculateGST(){
-          this.error = "";
-          this.gstAmount = "";
-          this.finalAmount = "";
+    <h2>What is GST?</h2>
+    <p>GST (Goods and Services Tax) is an indirect tax applied on the supply of goods and services in India. It replaced multiple taxes like VAT, service tax, and excise duty.</p>
 
-          if(!this.amount && this.amount !== 0){ this.error="Enter amount"; return; }
-          if(!this.gstRate && this.gstRate !== 0){ this.error="Enter GST rate"; return; }
+    <h2>How to Use This GST Calculator</h2>
+    <ul>
+      <li>Enter the base amount</li>
+      <li>Select the GST rate (5%, 12%, 18%, 28%)</li>
+      <li>Choose whether to add or remove GST</li>
+      <li>Click calculate to get GST amount and final price</li>
+    </ul>
 
-          if(this.mode === "add"){
-            let gst = (this.amount * this.gstRate) / 100;
-            this.gstAmount = gst.toFixed(2);
-            this.finalAmount = (Number(this.amount) + gst).toFixed(2);
-          } else if(this.mode === "remove"){
-            let original = (this.amount * 100) / (100 + Number(this.gstRate));
-            let gst = this.amount - original;
-            this.gstAmount = gst.toFixed(2);
-            this.finalAmount = original.toFixed(2);
-          }
-        }
+    <h2>GST Formula</h2>
+    <p><strong>GST Amount = (Original Amount × GST Rate) / 100</strong></p>
+
+    <h3>For Adding GST</h3>
+    <p>Final Price = Amount + GST</p>
+
+    <h3>For Removing GST</h3>
+    <p>Base Price = Amount / (1 + GST/100)</p>
+
+    <h2>Example Calculation</h2>
+    <p>Amount = ₹1000</p>
+    <p>GST Rate = 18%</p>
+    <p>GST = ₹180</p>
+    <p>Final Price = ₹1180</p>
+
+    <h2>Why GST is Important</h2>
+    <p>GST ensures transparency in taxation and creates a unified tax system across India. It helps businesses manage taxes efficiently.</p>
+
+    <h2>Important Note</h2>
+    <p>This calculator provides approximate GST values for quick estimation.</p>
+
+  </section>
+
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data(){
+    return{
+      amount:"",
+      gstRate:"",
+      type:"add",
+      gstAmount:"",
+      finalAmount:"",
+      error:""
+    }
+  },
+  methods:{
+    calculateGST(){
+      this.error="";
+      this.gstAmount="";
+      this.finalAmount="";
+
+      if(!this.amount){this.error="Enter amount";return;}
+      if(!this.gstRate){this.error="Select GST rate";return;}
+
+      let rate = parseFloat(this.gstRate);
+
+      if(this.type === "add"){
+        let gst = (this.amount * rate)/100;
+        this.gstAmount = gst.toFixed(2);
+        this.finalAmount = (parseFloat(this.amount) + gst).toFixed(2);
+      } else {
+        let base = this.amount / (1 + rate/100);
+        let gst = this.amount - base;
+        this.gstAmount = gst.toFixed(2);
+        this.finalAmount = base.toFixed(2);
       }
-    }).mount("#gstApp");
-  </script>
+    }
+  }
+}).mount("#gstApp");
+</script>
+
 </body>
 </html>
