@@ -3,61 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Length Calculator</title>
+
+<title>Length Converter – Convert Meter, KM, Inch, Feet Online</title>
+<meta name="description" content="Free online length converter tool. Convert meters, kilometers, feet, inches and more instantly.">
+
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{min-height:100vh;font-family:Arial,sans-serif;background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),linear-gradient(180deg,#020617,#020617);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
-.back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:16px;font-weight:500;color:#fff;background:#2563eb;padding:8px 14px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all 0.25s ease;margin-bottom:20px;}
-.back-btn:hover{background:#1e40af;transform:translateX(-3px);}
-.back-btn span{font-size:18px;}
-main.app{position:relative;max-width:360px;width:100%;background:#1E293B;border-radius:24px;padding:40px 20px 60px;box-shadow:0 20px 40px rgba(0,0,0,0.5);}
-input[type="number"], select{width:100%;height:45px;margin-bottom:20px;border:2px solid #38BDF8;border-radius:12px;padding:0 12px;font-size:16px;background:#020617;color:#E5E7EB;outline:none;transition:0.3s;}
-button{width:100%;height:45px;border:none;border-radius:14px;background:linear-gradient(135deg,#38BDF8,#22D3EE);color:#020617;font-size:17px;font-weight:600;cursor:pointer;transition:0.3s;}
-button:hover{transform:scale(1.05);box-shadow:0 10px 20px rgba(56,189,248,0.4);}
-.result{margin-top:20px;font-size:16px;color:#38BDF8;}
-.error{margin-top:10px;font-size:14px;color:#F87171;}
-@media(max-width:400px){main.app{padding:30px 15px 50px;}button,input[type="number"]{height:40px;font-size:15px;}}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,select,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input,select{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.result{color:#38BDF8;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;}
 </style>
 </head>
+
 <body>
-<a href="index.html" class="back-btn"><span>←</span> Back</a>
+<div class="container">
+<h1>Length Converter</h1>
+
 <main class="app" id="lengthApp">
-  <input type="number" v-model="value" placeholder="Enter value">
-  <select v-model="unit">
-    <option disabled value="">Select Unit</option>
-    <option value="m">Meters</option>
-    <option value="cm">Centimeters</option>
-    <option value="mm">Millimeters</option>
-    <option value="km">Kilometers</option>
-  </select>
-  <button @click="convertLength">Convert</button>
-  <p class="error" v-if="error">{{ error }}</p>
-  <p class="result" v-if="result">Converted Values: <br>
-    {{ result.m }} m, {{ result.cm }} cm, {{ result.mm }} mm, {{ result.km }} km
-  </p>
+<input type="number" v-model="value" placeholder="Enter value">
+
+<select v-model="from">
+<option value="m">Meter</option>
+<option value="km">Kilometer</option>
+<option value="ft">Feet</option>
+<option value="inch">Inch</option>
+</select>
+
+<select v-model="to">
+<option value="km">Kilometer</option>
+<option value="m">Meter</option>
+<option value="ft">Feet</option>
+<option value="inch">Inch</option>
+</select>
+
+<button @click="convert">Convert</button>
+
+<p class="result" v-if="result">Result: {{ result }}</p>
 </main>
+
+<section class="content">
+<h2>About Length Conversion</h2>
+<p>This tool helps you convert different units of length like meters, kilometers, feet, and inches instantly.</p>
+</section>
+
+</div>
+
 <script>
-const { createApp } = Vue;
+const {createApp} = Vue;
+
 createApp({
-  data(){ return { value:"", unit:"", result:"", error:"" } },
-  methods:{
-    convertLength(){
-      this.error=""; this.result="";
-      if(!this.value){this.error="Enter value"; return;}
-      let val = Number(this.value);
-      let m, cm, mm, km;
-      switch(this.unit){
-        case "m": m=val; cm=val*100; mm=val*1000; km=val/1000; break;
-        case "cm": m=val/100; cm=val; mm=val*10; km=val/100000; break;
-        case "mm": m=val/1000; cm=val/10; mm=val; km=val/1000000; break;
-        case "km": m=val*1000; cm=val*100000; mm=val*1000000; km=val; break;
-        default: this.error="Select a unit"; return;
-      }
-      this.result={m:m.toFixed(2),cm:cm.toFixed(2),mm:mm.toFixed(2),km:km.toFixed(5)};
-    }
-  }
+data(){
+return{
+value:"",
+from:"m",
+to:"km",
+result:"",
+rates:{
+m:1,
+km:0.001,
+ft:3.28084,
+inch:39.3701
+}
+}
+},
+methods:{
+convert(){
+let meter = this.value / this.rates[this.from];
+let res = meter * this.rates[this.to];
+this.result = res.toFixed(4) + " " + this.to;
+}
+}
 }).mount("#lengthApp");
 </script>
+
 </body>
 </html>
