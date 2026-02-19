@@ -1,140 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Square & Cube Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, sans-serif;
-    }
+<title>Square and Cube Calculator – Find Square & Cube of Number</title>
+<meta name="description" content="Calculate square and cube of any number instantly using our free calculator.">
 
-    body{
-      min-height: 100svh;
-  background:
-    radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),
-    radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),
-    radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),
-    linear-gradient(180deg, #020617, #020617);
-  color: #e5e7eb;
-    }
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-    .app{
-position:relative;
-      width:280px;
-      background:#1E293B;
-      padding:20px;
-top:160px;
-left:40px;
-      border-radius:15px;
-      color:white;
-      box-shadow:0 0 20px rgba(0,0,0,0.4);
-      text-align:center;
-    }
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    background: #2563eb; /* blue */
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  .back-btn:hover {
-    background: #1e40af;
-    transform: translateX(-3px);
-  }
-
-  .back-btn span {
-    font-size: 18px;
-  }
-    h2{
-      margin-bottom:15px;
-    }
-
-    input, button{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:none;
-      border-radius:8px;
-      outline:none;
-    }
-
-    button{
-      background:#38BDF8;
-      font-size:16px;
-      cursor:pointer;
-    }
-
-    button:hover{
-      background:#0EA5E9;
-    }
-
-    .result{
-      margin-top:10px;
-      font-size:15px;
-    }
-  </style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.result{color:#38BDF8;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
+</style>
 </head>
 
 <body>
-<a href="chose.html" class="back-btn">
-  <span>←</span> Back
-</a>
-<div class="app">
-  <h2>Square & Cube</h2>
+<div class="container">
 
-  <input type="number" v-model="num" placeholder="Enter number">
+<h1>Square and Cube Calculator</h1>
 
-  <button @click="square">Square (x²)</button>
-  <button @click="cube">Cube (x³)</button>
+<main class="app" id="scApp">
+<input type="number" v-model="num" placeholder="Enter Number">
 
-  <div class="result" v-if="result !== null">
-    <p>Result : <strong>{{ result }}</strong></p>
-  </div>
+<button @click="calc">Calculate</button>
+
+<p class="result" v-if="square">Square: {{ square }}</p>
+<p class="result" v-if="cube">Cube: {{ cube }}</p>
+</main>
+
+<section class="content">
+<h2>Understanding Square and Cube</h2>
+<p>Square and cube are basic mathematical operations used in algebra, geometry, and real life calculations. The square of a number means multiplying the number by itself once, while the cube means multiplying the number by itself twice.</p>
+
+<p>For example, the square of 5 is 25 and the cube of 5 is 125. These operations are useful in calculating area, volume, physics equations, and engineering formulas.</p>
+
+<p>This calculator helps you quickly compute square and cube values without manual calculations. It is useful for students, teachers, and anyone dealing with numbers.</p>
+
+<p>Simply enter any number and click calculate. The calculator will instantly display the square and cube values.</p>
+
+<p>Understanding squares and cubes helps you improve your mathematical skills and solve problems faster.</p>
+</section>
+
 </div>
 
 <script>
-const { createApp } = Vue;
+const {createApp} = Vue;
 
 createApp({
-  data(){
-    return{
-      num:"",
-      result:null
-    }
-  },
-  methods:{
-    square(){
-      if(this.num === ""){
-        alert("Enter a number");
-        return;
-      }
-      let n = Number(this.num);
-      this.result = n * n;
-    },
-    cube(){
-      if(this.num === ""){
-        alert("Enter a number");
-        return;
-      }
-      let n = Number(this.num);
-      this.result = n * n * n;
-    }
-  }
-}).mount(".app");
+data(){
+return{
+num:"",
+square:"",
+cube:""
+}
+},
+methods:{
+calc(){
+this.square = Math.pow(this.num,2);
+this.cube = Math.pow(this.num,3);
+}
+}
+}).mount("#scApp");
 </script>
 
 </body>
