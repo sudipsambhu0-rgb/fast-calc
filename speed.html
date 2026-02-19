@@ -3,46 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Speed Calculator</title>
+
+<title>Speed Calculator – Calculate Speed, Distance and Time</title>
+<meta name="description" content="Calculate speed, distance and time easily using our free online speed calculator.">
+
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{min-height:100vh;font-family:Arial,sans-serif;background: radial-gradient(800px circle at 10% 10%, rgba(56,189,248,0.18), transparent 40%),radial-gradient(700px circle at 90% 20%, rgba(34,197,94,0.16), transparent 45%),radial-gradient(900px circle at 50% 90%, rgba(244,63,94,0.14), transparent 50%),linear-gradient(180deg,#020617,#020617);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
-.back-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:16px;font-weight:500;color:#fff;background:#2563eb;padding:8px 14px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:all 0.25s ease;margin-bottom:20px;}
-.back-btn:hover{background:#1e40af;transform:translateX(-3px);}
-.back-btn span{font-size:18px;}
-main.app{position:relative;max-width:360px;width:100%;background:#1E293B;border-radius:24px;padding:40px 20px 60px;box-shadow:0 20px 40px rgba(0,0,0,0.5);}
-input[type="number"]{width:100%;height:45px;margin-bottom:20px;border:2px solid #38BDF8;border-radius:12px;padding:0 12px;font-size:16px;background:#020617;color:#E5E7EB;outline:none;transition:0.3s;}
-button{width:100%;height:45px;border:none;border-radius:14px;background:linear-gradient(135deg,#38BDF8,#22D3EE);color:#020617;font-size:17px;font-weight:600;cursor:pointer;transition:0.3s;}
-button:hover{transform:scale(1.05);box-shadow:0 10px 20px rgba(56,189,248,0.4);}
-.result{margin-top:20px;font-size:16px;color:#38BDF8;}
-.error{margin-top:10px;font-size:14px;color:#F87171;}
-@media(max-width:400px){main.app{padding:30px 15px 50px;}button,input[type="number"]{height:40px;font-size:15px;}}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;}
+.result{color:#38BDF8;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
 </style>
 </head>
+
 <body>
-<a href="index.html" class="back-btn"><span>←</span> Back</a>
+<div class="container">
+
+<h1>Speed Calculator</h1>
+
 <main class="app" id="speedApp">
-  <input type="number" v-model="distance" placeholder="Distance (km)">
-  <input type="number" v-model="time" placeholder="Time (hours)">
-  <button @click="calculateSpeed">Calculate Speed</button>
-  <p class="error" v-if="error">{{ error }}</p>
-  <p class="result" v-if="speed">Speed: {{ speed }} km/h</p>
+<input type="number" v-model="distance" placeholder="Distance (km)">
+<input type="number" v-model="time" placeholder="Time (hours)">
+
+<button @click="calc">Calculate Speed</button>
+
+<p class="result" v-if="speed">Speed: {{ speed }} km/h</p>
 </main>
+
+<section class="content">
+<h2>About Speed, Distance and Time</h2>
+<p>Speed is a basic concept in physics and daily life. It tells us how fast an object is moving. The formula for speed is simple: Speed = Distance ÷ Time. Using this formula, we can calculate how fast a vehicle is moving, how long it will take to reach a destination, or how far it can travel in a given time.</p>
+
+<p>This speed calculator helps you quickly compute speed by entering distance and time. It is useful for students, drivers, travelers, and anyone planning a journey.</p>
+
+<p>Understanding speed helps in many real life situations. For example, when you travel from one city to another, you can estimate how long it will take to reach your destination. In sports, speed helps measure performance of athletes. In science and engineering, speed is used in motion equations.</p>
+
+<p>To use this calculator, simply enter the distance in kilometers and time in hours. Click calculate and you will instantly get the speed in km/h.</p>
+
+<p>This tool reduces manual errors and gives instant accurate results. It is helpful for school homework, competitive exams, and real life travel planning.</p>
+
+<p>Practice with different values to understand how distance and time affect speed.</p>
+</section>
+
+</div>
+
 <script>
-const { createApp } = Vue;
+const {createApp} = Vue;
+
 createApp({
-  data(){ return { distance:"", time:"", speed:"", error:"" } },
-  methods:{
-    calculateSpeed(){
-      this.error=""; this.speed="";
-      if(!this.distance){this.error="Enter distance"; return;}
-      if(!this.time){this.error="Enter time"; return;}
-      let sp = Number(this.distance)/Number(this.time);
-      this.speed = sp.toFixed(2);
-    }
-  }
+data(){
+return{
+distance:"",
+time:"",
+speed:""
+}
+},
+methods:{
+calc(){
+this.speed = (this.distance/this.time).toFixed(2);
+}
+}
 }).mount("#speedApp");
 </script>
+
 </body>
 </html>
