@@ -4,41 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Unit Converter – Convert Length, Weight and More</title>
-<meta name="description" content="Convert different units like length, weight and more using this free unit converter tool.">
+<title>SI Unit Converter – Convert Length, Mass, Time, and More</title>
+<meta name="description" content="Convert SI units using real prefixes like kilo, milli, micro, etc. Fast and accurate unit converter for students and professionals.">
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-<style>/* same UI styles */</style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,select,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input,select{border:2px solid #38BDF8;background:#020617;color:#fff;}
+button{background:#38BDF8;color:#000;font-weight:bold;cursor:pointer;}
+.result{color:#38BDF8;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
+</style>
 </head>
 
 <body>
 <div class="container">
 
-<h1>Unit Converter</h1>
+<h1>SI Unit Converter</h1>
 
 <main class="app" id="unitApp">
-<input type="number" v-model="value" placeholder="Enter Value">
+<input type="number" v-model="value" placeholder="Enter value">
 
-<select v-model="type">
-<option value="length">Length</option>
-<option value="weight">Weight</option>
+<select v-model="from">
+<option v-for="(exp,sym) in prefixes" :value="exp">{{ sym }}</option>
+</select>
+
+<select v-model="to">
+<option v-for="(exp,sym) in prefixes" :value="exp">{{ sym }}</option>
 </select>
 
 <button @click="convert">Convert</button>
 
-<p class="result" v-if="result">{{ result }}</p>
+<p class="result" v-if="result">Result: {{ result }} {{ toSymbol }}</p>
 </main>
 
 <section class="content">
-<h2>About Unit Conversion</h2>
-<p>Unit conversion is used to convert one measurement into another. It is useful in science, engineering, and everyday life.</p>
+<h2>About SI Unit Conversion</h2>
+<p>SI units use standard prefixes to indicate multiples and submultiples of base units. For example, kilo means 1000 times, milli means 0.001 times, micro means 0.000001 times, and so on. These prefixes help in writing very large or very small numbers concisely.</p>
 
-<p>This tool helps you convert basic units of length and weight quickly and accurately.</p>
+<p>Using SI unit conversion allows students, engineers, scientists, and everyday users to convert units easily without manually calculating exponents. This converter supports all common SI prefixes from atto (10^-18) to exa (10^18).</p>
 
-<p>Understanding units helps you avoid mistakes and improves accuracy in calculations.</p>
+<p>For example, 5 kilometers is 5000 meters, 2 milligrams is 0.002 grams, and 3 megabytes is 3,000,000 bytes. This tool calculates these conversions instantly and accurately.</p>
 
-<p>Simply enter a value, choose conversion type, and get instant results.</p>
+<p>Simply enter a number, choose the from-prefix and to-prefix, and click convert. The tool will display the converted value using scientific accuracy.</p>
+
+<p>Understanding SI prefixes is important in physics, chemistry, engineering, and finance. This converter also improves learning and avoids manual calculation errors.</p>
 </section>
 
 </div>
@@ -50,17 +65,42 @@ createApp({
 data(){
 return{
 value:"",
-type:"length",
-result:""
+from:0,
+to:0,
+result:"",
+toSymbol:"",
+// Prefixes with exponents for base unit
+prefixes:{
+"a": -18,
+"f": -15,
+"p": -12,
+"n": -9,
+"μ": -6,
+"m": -3,
+"c": -2,
+"d": -1,
+"": 0,
+"da": 1,
+"h": 2,
+"k": 3,
+"M": 6,
+"G": 9,
+"T": 12,
+"P": 15,
+"E": 18
+}
 }
 },
 methods:{
 convert(){
-if(this.type==="length"){
-this.result=this.value+" meters = "+(this.value*3.28084).toFixed(2)+" feet";
-}else{
-this.result=this.value+" kg = "+(this.value*2.20462).toFixed(2)+" pounds";
-}
+if(this.value==="") return;
+let v = parseFloat(this.value);
+let fromExp = parseInt(this.from);
+let toExp = parseInt(this.to);
+
+let converted = v * Math.pow(10, fromExp - toExp);
+this.result = converted.toLocaleString('fullwide', {useGrouping:false});
+this.toSymbol = Object.keys(this.prefixes).find(k=>this.prefixes[k]==toExp);
 }
 }
 }).mount("#unitApp");
