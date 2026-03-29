@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Average Calculator – Calculate Mean of Numbers Easily</title>
-<meta name="description" content="Calculate the average (mean) of numbers easily using our free online average calculator. Perfect for students, finance, and daily use.">
+<title>Time Calculator – Add, Subtract & Find Difference Between Times</title>
+<meta name="description" content="Free online time calculator to add or subtract hours and minutes, find the difference between two times, and convert time easily. Fast and accurate tool.">
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
@@ -14,41 +14,84 @@
 body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
 .container{max-width:800px;margin:auto;}
 main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
-input,button{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input,button,select{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
 input{border:2px solid #38BDF8;background:#020617;color:#fff;}
-button{background:#38BDF8;color:#000;font-weight:bold;}
-.result{color:#38BDF8;margin-top:10px;}
+select{border:2px solid #38BDF8;background:#020617;color:#fff;cursor:pointer;}
+button{background:#38BDF8;color:#000;font-weight:bold;cursor:pointer;}
+button:hover{background:#7dd3fc;}
+.result{color:#38BDF8;margin-top:10px;font-size:1.1em;font-weight:bold;}
+.error{color:#f87171;margin-top:10px;}
 .content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
+.content h2{color:#38BDF8;margin-bottom:12px;}
+.content p{margin-bottom:14px;}
+.row{display:flex;gap:10px;}
+.row input{flex:1;}
+.label{font-size:0.85em;color:#94a3b8;margin-bottom:5px;}
+h1{font-size:1.8em;margin-bottom:8px;}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<h1>Average Calculator</h1>
-<p>Calculate the mean (average) of multiple numbers instantly using this simple tool.</p>
+<h1>Time Calculator</h1>
+<p>Add, subtract or find the difference between two times instantly using this simple tool.</p>
 
-<main class="app" id="avgApp">
-<input type="text" v-model="numbers" placeholder="Enter numbers separated by commas (e.g. 10,20,30)">
+<main class="app" id="timeApp">
 
-<button @click="calc">Calculate Average</button>
+  <div class="label">Select Operation</div>
+  <select v-model="mode" @change="reset">
+    <option value="add">Add Two Times</option>
+    <option value="subtract">Subtract Two Times</option>
+    <option value="diff">Difference Between Two Times</option>
+  </select>
 
-<p class="result" v-if="average">Average: {{ average }}</p>
+  <div v-if="mode === 'add' || mode === 'subtract'">
+    <div class="label">Time 1 (Hours : Minutes)</div>
+    <div class="row">
+      <input type="number" v-model="h1" placeholder="Hours" min="0">
+      <input type="number" v-model="m1" placeholder="Minutes" min="0" max="59">
+    </div>
+    <div class="label">Time 2 (Hours : Minutes)</div>
+    <div class="row">
+      <input type="number" v-model="h2" placeholder="Hours" min="0">
+      <input type="number" v-model="m2" placeholder="Minutes" min="0" max="59">
+    </div>
+  </div>
+
+  <div v-if="mode === 'diff'">
+    <div class="label">Start Time (HH : MM)</div>
+    <div class="row">
+      <input type="number" v-model="h1" placeholder="Hours (0-23)" min="0" max="23">
+      <input type="number" v-model="m1" placeholder="Minutes (0-59)" min="0" max="59">
+    </div>
+    <div class="label">End Time (HH : MM)</div>
+    <div class="row">
+      <input type="number" v-model="h2" placeholder="Hours (0-23)" min="0" max="23">
+      <input type="number" v-model="m2" placeholder="Minutes (0-59)" min="0" max="59">
+    </div>
+  </div>
+
+  <button @click="calculate">Calculate</button>
+
+  <p class="result" v-if="result">Result: {{ result }}</p>
+  <p class="error" v-if="errorMsg">{{ errorMsg }}</p>
+
 </main>
 
 <section class="content">
-<h2>What is Average?</h2>
-<p>The average, also known as the mean, is one of the most commonly used mathematical calculations. It represents the central value of a group of numbers. The formula for average is: Average = Sum of all values ÷ Number of values.</p>
+  <h2>What is a Time Calculator?</h2>
+  <p>A time calculator is a tool that helps you perform arithmetic operations on time values. Unlike regular numbers, time follows a base-60 system where 60 minutes make one hour. This makes manual calculation tricky, which is why a time calculator is very useful.</p>
 
-<p>For example, if you have numbers 10, 20, and 30, the average will be (10 + 20 + 30) ÷ 3 = 20. The average helps us understand the overall trend or typical value in a dataset.</p>
+  <p>This calculator supports three main operations. First, you can add two time values together. For example, adding 2 hours 45 minutes and 1 hour 30 minutes gives you 4 hours 15 minutes. The tool automatically handles minute overflow and converts it into hours.</p>
 
-<p>This calculator allows you to quickly compute the average of multiple numbers. You just need to enter the numbers separated by commas and click the calculate button. The tool will instantly show you the average value.</p>
+  <p>Second, you can subtract one time from another. This is useful when you want to know how much time is remaining or how long something took. For example, subtracting 1 hour 20 minutes from 3 hours 10 minutes gives you 1 hour 50 minutes.</p>
 
-<p>Average is widely used in many real life situations. Students use it to calculate marks and grades. Businesses use it to analyze sales data and performance. In finance, it is used to understand income, expenses, and investment returns.</p>
+  <p>Third, you can find the difference between a start time and an end time. This is helpful for calculating work hours, travel duration, or any event timing. Simply enter the start and end time and the calculator will give you the exact duration.</p>
 
-<p>Understanding averages helps in better decision making and data analysis. It reduces complex numbers into a single meaningful value that is easy to understand.</p>
+  <p>Time calculations are used in many daily situations. Workers use it to calculate their shift hours. Students use it to manage study schedules. Travelers use it to plan journey durations. Project managers use it to track time spent on tasks.</p>
 
-<p>This calculator is fast, accurate, and easy to use. It helps you avoid manual calculation errors and saves your time.</p>
+  <p>This tool is free, fast, and works directly in your browser. No installation or signup is needed. Just enter the values and get your answer instantly with full accuracy.</p>
 </section>
 
 </div>
@@ -57,21 +100,60 @@ button{background:#38BDF8;color:#000;font-weight:bold;}
 const {createApp} = Vue;
 
 createApp({
-data(){
-return{
-numbers:"",
-average:""
-}
-},
-methods:{
-calc(){
-let arr = this.numbers.split(",").map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
-
-let sum = arr.reduce((a,b)=>a+b,0);
-this.average = (sum/arr.length).toFixed(2);
-}
-}
-}).mount("#avgApp");
+  data(){
+    return {
+      mode: "add",
+      h1: "", m1: "",
+      h2: "", m2: "",
+      result: "",
+      errorMsg: ""
+    }
+  },
+  methods:{
+    reset(){
+      this.h1 = ""; this.m1 = "";
+      this.h2 = ""; this.m2 = "";
+      this.result = ""; this.errorMsg = "";
+    },
+    calculate(){
+      this.result = ""; this.errorMsg = "";
+      let hours1 = parseInt(this.h1);
+      let mins1  = parseInt(this.m1);
+      let hours2 = parseInt(this.h2);
+      let mins2  = parseInt(this.m2);
+      if(isNaN(hours1)||isNaN(mins1)||isNaN(hours2)||isNaN(mins2)){
+        this.errorMsg = "Please enter valid numbers in all fields.";
+        return;
+      }
+      if(mins1 > 59 || mins2 > 59){
+        this.errorMsg = "Minutes cannot be more than 59.";
+        return;
+      }
+      let totalMins1 = hours1 * 60 + mins1;
+      let totalMins2 = hours2 * 60 + mins2;
+      if(this.mode === "add"){
+        let total = totalMins1 + totalMins2;
+        let rh = Math.floor(total / 60);
+        let rm = total % 60;
+        this.result = rh + " hour(s) " + rm + " minute(s)";
+      }
+      else if(this.mode === "subtract"){
+        let total = totalMins1 - totalMins2;
+        if(total < 0){ this.errorMsg = "Time 1 must be greater than Time 2."; return; }
+        let rh = Math.floor(total / 60);
+        let rm = total % 60;
+        this.result = rh + " hour(s) " + rm + " minute(s)";
+      }
+      else if(this.mode === "diff"){
+        let diff = totalMins2 - totalMins1;
+        if(diff < 0) diff += 24 * 60;
+        let rh = Math.floor(diff / 60);
+        let rm = diff % 60;
+        this.result = rh + " hour(s) " + rm + " minute(s)";
+      }
+    }
+  }
+}).mount("#timeApp");
 </script>
 
 </body>
