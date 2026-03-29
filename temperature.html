@@ -4,50 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Temperature Converter – Convert Celsius, Fahrenheit, Kelvin</title>
-<meta name="description" content="Convert temperature units easily between Celsius, Fahrenheit and Kelvin.">
+<title>Temperature Calculator – Convert Celsius, Fahrenheit and Kelvin</title>
+<meta name="description" content="Free online temperature calculator to convert between Celsius, Fahrenheit and Kelvin instantly. Fast, accurate and easy to use.">
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-<style>/* same UI styles */</style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial;background:#020617;color:#e5e7eb;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+main.app{background:#1E293B;padding:25px;border-radius:20px;margin:20px 0;}
+input,button,select{width:100%;height:45px;margin-bottom:15px;border-radius:10px;border:none;padding:0 10px;}
+input{border:2px solid #38BDF8;background:#020617;color:#fff;}
+select{border:2px solid #38BDF8;background:#020617;color:#fff;cursor:pointer;}
+button{background:#38BDF8;color:#000;font-weight:bold;cursor:pointer;}
+button:hover{background:#7dd3fc;}
+.result{color:#38BDF8;margin-top:10px;font-size:1.1em;font-weight:bold;}
+.error{color:#f87171;margin-top:10px;}
+.content{background:#0f172a;padding:20px;border-radius:12px;line-height:1.7;}
+.content h2{color:#38BDF8;margin-bottom:12px;}
+.content p{margin-bottom:14px;}
+.label{font-size:0.85em;color:#94a3b8;margin-bottom:5px;}
+h1{font-size:1.8em;margin-bottom:8px;}
+</style>
 </head>
 
 <body>
 <div class="container">
 
-<h1>Temperature Converter</h1>
+<h1>Temperature Calculator</h1>
+<p>Convert temperature between Celsius, Fahrenheit and Kelvin instantly using this simple tool.</p>
 
 <main class="app" id="tempApp">
-<input type="number" v-model="value" placeholder="Enter Temperature">
 
-<select v-model="from">
-<option value="C">Celsius</option>
-<option value="F">Fahrenheit</option>
-<option value="K">Kelvin</option>
-</select>
+  <div class="label">Select Conversion</div>
+  <select v-model="mode" @change="reset">
+    <option value="ctof">Celsius to Fahrenheit</option>
+    <option value="ftoc">Fahrenheit to Celsius</option>
+    <option value="ctok">Celsius to Kelvin</option>
+    <option value="ktoc">Kelvin to Celsius</option>
+    <option value="ftok">Fahrenheit to Kelvin</option>
+    <option value="ktof">Kelvin to Fahrenheit</option>
+  </select>
 
-<select v-model="to">
-<option value="F">Fahrenheit</option>
-<option value="C">Celsius</option>
-<option value="K">Kelvin</option>
-</select>
+  <div class="label">Enter Temperature</div>
+  <input type="number" v-model="inputVal" :placeholder="placeholder">
 
-<button @click="convert">Convert</button>
+  <button @click="calculate">Convert</button>
 
-<p class="result" v-if="result">Result: {{ result }}</p>
+  <p class="result" v-if="result">Result: {{ result }}</p>
+  <p class="error" v-if="errorMsg">{{ errorMsg }}</p>
+
 </main>
 
 <section class="content">
-<h2>About Temperature Conversion</h2>
-<p>Temperature is an important measurement used in science, weather forecasting, cooking, and daily life. Different countries use different temperature units such as Celsius, Fahrenheit, and Kelvin.</p>
+  <h2>What is a Temperature Calculator?</h2>
+  <p>A temperature calculator is a tool that helps you convert temperature values between different units. The three most commonly used temperature scales are Celsius, Fahrenheit, and Kelvin. Each scale is used in different parts of the world and in different fields of science.</p>
 
-<p>This converter helps you easily switch between these temperature units instantly.</p>
+  <p>Celsius is the most widely used scale in everyday life across the world. Water freezes at 0 degrees Celsius and boils at 100 degrees Celsius. Fahrenheit is commonly used in the United States. In Fahrenheit, water freezes at 32 degrees and boils at 212 degrees.</p>
 
-<p>For example, water freezes at 0°C, 32°F, and 273.15K. Understanding temperature conversion is useful in science experiments and real life applications.</p>
+  <p>Kelvin is used in science and physics. It starts from absolute zero, which is the lowest possible temperature. Zero Kelvin is equal to minus 273.15 degrees Celsius. Kelvin has no negative values, which makes it useful in scientific calculations.</p>
 
-<p>Simply enter the temperature value, select the units, and click convert to get the result instantly.</p>
+  <p>This calculator supports all six conversions between these three scales. You just need to select the conversion type, enter the value, and click the convert button. The result will be shown instantly with two decimal precision.</p>
 
-<p>This tool is accurate, fast, and easy to use for students and professionals.</p>
+  <p>Temperature conversion is used in cooking, weather forecasting, chemistry, and engineering. Knowing how to convert between units helps you understand temperature values from different sources around the world.</p>
+
+  <p>This tool is free, accurate, and works directly in your browser without any installation or signup required.</p>
 </section>
 
 </div>
@@ -56,27 +78,45 @@
 const {createApp} = Vue;
 
 createApp({
-data(){
-return{
-value:"",
-from:"C",
-to:"F",
-result:""
-}
-},
-methods:{
-convert(){
-let v=this.value;
+  data(){
+    return {
+      mode: "ctof",
+      inputVal: "",
+      result: "",
+      errorMsg: ""
+    }
+  },
+  computed:{
+    placeholder(){
+      if(this.mode.startsWith("c")) return "Enter Celsius";
+      if(this.mode.startsWith("f")) return "Enter Fahrenheit";
+      if(this.mode.startsWith("k")) return "Enter Kelvin";
+    }
+  },
+  methods:{
+    reset(){
+      this.inputVal = "";
+      this.result = "";
+      this.errorMsg = "";
+    },
+    calculate(){
+      this.result = ""; this.errorMsg = "";
+      let val = parseFloat(this.inputVal);
+      if(isNaN(val)){
+        this.errorMsg = "Please enter a valid number.";
+        return;
+      }
+      let res;
+      if(this.mode === "ctof") res = (val * 9/5) + 32 + " °F";
+      else if(this.mode === "ftoc") res = (val - 32) * 5/9 + " °C";
+      else if(this.mode === "ctok") res = val + 273.15 + " K";
+      else if(this.mode === "ktoc") res = val - 273.15 + " °C";
+      else if(this.mode === "ftok") res = (val - 32) * 5/9 + 273.15 + " K";
+      else if(this.mode === "ktof") res = (val - 273.15) * 9/5 + 32 + " °F";
 
-if(this.from==="C" && this.to==="F") this.result=(v*9/5+32).toFixed(2)+" °F";
-else if(this.from==="F" && this.to==="C") this.result=((v-32)*5/9).toFixed(2)+" °C";
-else if(this.from==="C" && this.to==="K") this.result=(v+273.15).toFixed(2)+" K";
-else if(this.from==="K" && this.to==="C") this.result=(v-273.15).toFixed(2)+" °C";
-else if(this.from==="F" && this.to==="K") this.result=((v-32)*5/9+273.15).toFixed(2)+" K";
-else if(this.from==="K" && this.to==="F") this.result=((v-273.15)*9/5+32).toFixed(2)+" °F";
-else this.result=v;
-}
-}
+      this.result = parseFloat(res).toFixed(2) + " " + res.split(" ")[1];
+    }
+  }
 }).mount("#tempApp");
 </script>
 
